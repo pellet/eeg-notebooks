@@ -1,5 +1,6 @@
 # Main repo requirements
-psychopy==2023.1.0
+#upgrade psychopy to use newer wxpython dependency prebuilt for m1.
+psychopy==2023.2.2
 psychtoolbox
 scikit-learn>=0.23.2
 pandas>=1.1.4
@@ -19,6 +20,8 @@ h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 keyboard==0.13.5
+#psychopy needs <8 for some reason.
+pyobjc==7.3
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
@@ -27,6 +30,8 @@ attrdict3
 # You can pass `--find-links=https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/` your `pip install` to use the prebuilt wheels at the link.
 wxPython>=4.0 ; platform_system == "Linux"
 click
+#wxpython 4.2.1 is pre-built for arm64
+wxPython==4.2.1
 
 # pywinhook needs some special treatment since there are only wheels on PyPI for Python 3.7-3.8, and building requires special tools (swig, VS C++ tools)
 # See issue: https://github.com/NeuroTechX/eeg-notebooks/issues/29
