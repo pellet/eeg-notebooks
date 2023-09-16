@@ -10,7 +10,7 @@ seaborn>=0.11.0
 pyriemann>=0.2.7
 jupyter
 muselsl>=2.0.2
-pylsl==1.10.5  # due to https://github.com/NeuroTechX/eeg-notebooks/issues/187
+pylsl
 brainflow>=4.8.2
 gdown>=4.5.1
 matplotlib>=3.3.3
