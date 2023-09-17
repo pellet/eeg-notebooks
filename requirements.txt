@@ -9,7 +9,7 @@ mne>=0.20.8
 seaborn>=0.11.0
 pyriemann>=0.2.7
 jupyter
-muselsl>=2.0.2
+muselsl==2.0.23
 pylsl
 brainflow>=4.8.2
 gdown>=4.5.1
@@ -19,7 +19,8 @@ pyserial>=3.5
 h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
-keyboard==0.13.5
+#keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
+keyboard==0.13.6
 #psychopy needs <8 for some reason.
 pyobjc==7.3
 airium>=0.1.0
