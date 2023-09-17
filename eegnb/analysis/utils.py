@@ -285,8 +285,7 @@ def plot_conditions(
                 y=ch,
                 color=color,
                 n_boot=n_boot,
-                ax=axes[ch],
-                errorbar=('ci',ci)
+                ax=axes[ch]
             )
         axes[ch].set(xlabel='Time (s)', ylabel='Amplitude (uV)', title=epochs.ch_names[channel_order[ch]])
 
