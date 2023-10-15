@@ -65,7 +65,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
             return {"cycle": cycle, "freq": stim_freq, "n_cycles": n_cycles}
 
         # Set up stimuli
-        frame_rate = np.round(self.window.getActualFrameRate())  # Frame rate, in Hz
+        frame_rate = np.round(120)#self.window.getActualFrameRate())  # Frame rate, in Hz
         freqs = get_possible_ssvep_freqs(frame_rate, stim_type="reversal")
         self.stim_patterns = [
         init_flicker_stim(frame_rate, 2, self.soa),
