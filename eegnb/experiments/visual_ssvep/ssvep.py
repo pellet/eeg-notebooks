@@ -19,6 +19,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
     def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.5, soa = 3.0, jitter = 0.2, use_vr=False):
         
+        self.use_vr = use_vr
         exp_name = "Visual SSVEP"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
 
@@ -101,14 +102,14 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
         # Present flickering stim
         for _ in range(int(self.stim_patterns[ind]["n_cycles"])):
-            if super().use_vr:
+            if self.use_vr:
                 tracking_state = self.window.getTrackingState()
                 self.window.calcEyePoses(tracking_state.headPose.thePose)
                 self.window.setDefaultView()
 
             self.grating.setAutoDraw(True)
             for _ in range(int(self.stim_patterns[ind]["cycle"][0])):
-                if super().use_vr:
+                if self.use_vr:
                     tracking_state = self.window.getTrackingState()
                     self.window.calcEyePoses(tracking_state.headPose.thePose)
                     self.window.setDefaultView()
@@ -116,7 +117,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
             self.grating.setAutoDraw(False)
             self.grating_neg.setAutoDraw(True)
             for _ in range(self.stim_patterns[ind]["cycle"][1]):
-                if super().use_vr:
+                if self.use_vr:
                     tracking_state = self.window.getTrackingState()
                     self.window.calcEyePoses(tracking_state.headPose.thePose)
                     self.window.setDefaultView()
@@ -124,7 +125,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
             self.grating_neg.setAutoDraw(False)
         pass
 
-        if super().use_vr:
+        if self.use_vr:
             tracking_state = self.window.getTrackingState()
             self.window.calcEyePoses(tracking_state.headPose.thePose)
             self.window.setDefaultView()
