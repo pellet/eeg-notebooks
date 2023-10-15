@@ -39,5 +39,5 @@ print(save_fn)
 # Run experiment
 # ---------------------  
 #  
-ssvep = VisualSSVEP(duration=record_duration, eeg=eeg_device, save_fn=save_fn)
+ssvep = VisualSSVEP(duration=record_duration, eeg=eeg_device, save_fn=save_fn, use_vr=False)
 ssvep.run()

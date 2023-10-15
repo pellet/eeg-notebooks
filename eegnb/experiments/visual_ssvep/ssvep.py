@@ -17,10 +17,10 @@ from typing import Optional
 
 class VisualSSVEP(Experiment.BaseExperiment):
 
-    def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.5, soa = 3.0, jitter = 0.2):
+    def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.5, soa = 3.0, jitter = 0.2, use_vr=False):
         
         exp_name = "Visual SSVEP"
-        super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter)
+        super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
 
     def load_stimulus(self):
         
