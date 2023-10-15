@@ -101,14 +101,31 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
         # Present flickering stim
         for _ in range(int(self.stim_patterns[ind]["n_cycles"])):
+            if super().use_vr:
+                tracking_state = self.window.getTrackingState()
+                self.window.calcEyePoses(tracking_state.headPose.thePose)
+                self.window.setDefaultView()
+
             self.grating.setAutoDraw(True)
             for _ in range(int(self.stim_patterns[ind]["cycle"][0])):
+                if super().use_vr:
+                    tracking_state = self.window.getTrackingState()
+                    self.window.calcEyePoses(tracking_state.headPose.thePose)
+                    self.window.setDefaultView()
                 self.window.flip()
             self.grating.setAutoDraw(False)
             self.grating_neg.setAutoDraw(True)
             for _ in range(self.stim_patterns[ind]["cycle"][1]):
+                if super().use_vr:
+                    tracking_state = self.window.getTrackingState()
+                    self.window.calcEyePoses(tracking_state.headPose.thePose)
+                    self.window.setDefaultView()
                 self.window.flip()
             self.grating_neg.setAutoDraw(False)
         pass
 
+        if super().use_vr:
+            tracking_state = self.window.getTrackingState()
+            self.window.calcEyePoses(tracking_state.headPose.thePose)
+            self.window.setDefaultView()
         self.window.flip()
