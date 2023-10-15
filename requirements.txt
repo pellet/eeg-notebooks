@@ -9,7 +9,7 @@ mne>=0.20.8
 seaborn>=0.11.0
 pyriemann>=0.2.7
 jupyter
-muselsl==2.0.23
+muselsl==2.0.2
 pylsl
 brainflow>=4.8.2
 gdown>=4.5.1
@@ -27,6 +27,7 @@ airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
 
+attrs==19.3.0
 # This might try to build from source on linux (since there are no wheels for Linux on PyPI) .
 # You can pass `--find-links=https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/` your `pip install` to use the prebuilt wheels at the link.
 wxPython>=4.0 ; platform_system == "Linux"
