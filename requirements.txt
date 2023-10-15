@@ -20,9 +20,9 @@ h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 #keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
-keyboard==0.13.6
+keyboard==0.13.6; platform_system == "macOS"
 #psychopy needs <8 for some reason.
-pyobjc==7.3
+pyobjc==7.3; platform_system == "macOS"
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
