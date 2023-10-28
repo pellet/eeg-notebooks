@@ -26,8 +26,8 @@ pyobjc==7.3; platform_system == "macOS"
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
-# VR support    
-psychxr
+# Oculus/Quest VR support - currently only supported on Windows.
+psychxr; platform_system == "Windows"
 
 attrs==19.3.0
 # This might try to build from source on linux (since there are no wheels for Linux on PyPI) .
