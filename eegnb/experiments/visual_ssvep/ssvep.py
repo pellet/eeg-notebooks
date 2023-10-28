@@ -66,7 +66,11 @@ class VisualSSVEP(Experiment.BaseExperiment):
             return {"cycle": cycle, "freq": stim_freq, "n_cycles": n_cycles}
 
         # Set up stimuli
-        frame_rate = np.round(120)#self.window.getActualFrameRate())  # Frame rate, in Hz
+
+        # Frame rate, in Hz
+        # GetActualFrameRate() crashes in psychxr due to 'endframe called before beginframe'
+        # Quest needs to be set to 120hz not 90hz to support 20hz stimulus.
+        frame_rate = 120 if self.use_vr else np.round(self.window.getActualFrameRate())
         freqs = get_possible_ssvep_freqs(frame_rate, stim_type="reversal")
         self.stim_patterns = [
         init_flicker_stim(frame_rate, 2, self.soa),
@@ -102,31 +106,20 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
         # Present flickering stim
         for _ in range(int(self.stim_patterns[ind]["n_cycles"])):
-            if self.use_vr:
-                tracking_state = self.window.getTrackingState()
-                self.window.calcEyePoses(tracking_state.headPose.thePose)
-                self.window.setDefaultView()
 
-            self.grating.setAutoDraw(True)
             for _ in range(int(self.stim_patterns[ind]["cycle"][0])):
                 if self.use_vr:
                     tracking_state = self.window.getTrackingState()
                     self.window.calcEyePoses(tracking_state.headPose.thePose)
                     self.window.setDefaultView()
+                self.grating.draw()
                 self.window.flip()
-            self.grating.setAutoDraw(False)
-            self.grating_neg.setAutoDraw(True)
+
             for _ in range(self.stim_patterns[ind]["cycle"][1]):
                 if self.use_vr:
                     tracking_state = self.window.getTrackingState()
                     self.window.calcEyePoses(tracking_state.headPose.thePose)
                     self.window.setDefaultView()
+                self.grating_neg.draw()
                 self.window.flip()
-            self.grating_neg.setAutoDraw(False)
         pass
-
-        if self.use_vr:
-            tracking_state = self.window.getTrackingState()
-            self.window.calcEyePoses(tracking_state.headPose.thePose)
-            self.window.setDefaultView()
-        self.window.flip()
