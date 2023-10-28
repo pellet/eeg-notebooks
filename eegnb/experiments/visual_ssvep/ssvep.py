@@ -68,9 +68,9 @@ class VisualSSVEP(Experiment.BaseExperiment):
         # Set up stimuli
 
         # Frame rate, in Hz
-        # GetActualFrameRate() crashes in psychxr due to 'endframe called before beginframe'
-        # Quest needs to be set to 120hz not 90hz to support 20hz stimulus.
-        frame_rate = 120 if self.use_vr else np.round(self.window.getActualFrameRate())
+        # GetActualFrameRate() crashes in psychxr due to 'EndFrame called before BeginFrame'
+        # VR refresh rate needs to be set to 120hz not 90hz to support 20hz stimulus.
+        frame_rate = np.round(self.window.displayRefreshRate if self.use_vr else self.window.getActualFrameRate())
         freqs = get_possible_ssvep_freqs(frame_rate, stim_type="reversal")
         self.stim_patterns = [
         init_flicker_stim(frame_rate, 2, self.soa),
