@@ -25,11 +25,12 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
     def load_stimulus(self):
         
-        self.grating = visual.GratingStim(win=self.window, mask="circle", size=80, sf=0.2)
+        grating_sf = 400 if self.use_vr else 0.2
+        self.grating = visual.GratingStim(win=self.window, mask="circle", size=80, sf=grating_sf)
+        self.grating_neg = visual.GratingStim(win=self.window, mask="circle", size=80, sf=grating_sf, phase=0.5)
 
-        self.grating_neg = visual.GratingStim(win=self.window, mask="circle", size=80, sf=0.2, phase=0.5)
-
-        fixation = visual.GratingStim(win=self.window, size=0.2, pos=[0, 0], sf=0.2, color=[1, 0, 0], autoDraw=True)
+        self.fixation = visual.GratingStim(win=self.window, pos=[0, 0], sf=grating_sf, color=[1, 0, 0])
+        self.fixation.size = 0.02 if self.use_vr else 0.2
 
         # Generate the possible ssvep frequencies based on monitor refresh rate
         def get_possible_ssvep_freqs(frame_rate, stim_type="single"):
@@ -69,7 +70,6 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
         # Frame rate, in Hz
         # GetActualFrameRate() crashes in psychxr due to 'EndFrame called before BeginFrame'
-        # VR refresh rate needs to be set to 120hz not 90hz to support 20hz stimulus.
         frame_rate = np.round(self.window.displayRefreshRate if self.use_vr else self.window.getActualFrameRate())
         freqs = get_possible_ssvep_freqs(frame_rate, stim_type="reversal")
         self.stim_patterns = [
@@ -113,6 +113,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
                     self.window.calcEyePoses(tracking_state.headPose.thePose)
                     self.window.setDefaultView()
                 self.grating.draw()
+                self.fixation.draw()
                 self.window.flip()
 
             for _ in range(self.stim_patterns[ind]["cycle"][1]):
@@ -121,5 +122,6 @@ class VisualSSVEP(Experiment.BaseExperiment):
                     self.window.calcEyePoses(tracking_state.headPose.thePose)
                     self.window.setDefaultView()
                 self.grating_neg.draw()
+                self.fixation.draw()
                 self.window.flip()
         pass
