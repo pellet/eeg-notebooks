@@ -20,7 +20,7 @@ import random
 
 import numpy as np
 from pandas import DataFrame
-from psychopy import visual, event
+from psychopy import visual, core, event
 
 from eegnb import generate_save_fn
 
@@ -124,7 +124,10 @@ class BaseExperiment:
         while len(event.getKeys(keyList="space")) == 0:
             # Displaying the instructions on the screen
             text = visual.TextStim(win=self.window, text=self.instruction_text, color=[-1, -1, -1])
-            self.__draw(lambda: self.__draw_instructions(text))
+            if self.use_vr:
+                self.__draw_vr(lambda: self.__draw_instructions(text))
+            else:
+                self.__draw_instructions(text)
 
             # Enabling the cursor again
             self.window.mouseVisible = True
@@ -133,33 +136,41 @@ class BaseExperiment:
         text.draw()
         self.window.flip()
 
-    def __draw(self, present_stimulus: Callable):
-        """
-        Set the current eye position and projection for all given stimulus,
-        then draw all stimulus and flip the window/buffer
-         """
-        if self.use_vr:
-            tracking_state = self.window.getTrackingState()
-            self.window.calcEyePoses(tracking_state.headPose.thePose)
-            self.window.setDefaultView()
-        present_stimulus()
+    def __present(self):
+        start = time()
 
-    def run(self, instructions=True):
-        """ Do the present operation for a bunch of experiments """
+        # Iterate through the events
+        for ii, trial in self.trials.iterrows():
 
+            # Intertrial interval
+            core.wait(self.iti + np.random.rand() * self.jitter)
+
+            # Stimulus presentation overwritten by specific experiment
+            self.present_stimulus(ii, trial)
+
+            # Offset
+            core.wait(self.soa)
+            self.window.flip()
+
+            # Exiting the loop condition, looks ugly and needs to be fixed
+            if len(event.getKeys()) > 0 or (time() - start) > self.record_duration:
+                break
+
+            # Clearing the screen for the next trial
+            event.clearEvents()
+
+    def __draw_vr(self, draw: Callable):
+        # Set the current eye position and projection for all given stimulus,
+        # then draw all stimulus and flip the window/buffer
+        tracking_state = self.window.getTrackingState()
+        self.window.calcEyePoses(tracking_state.headPose.thePose)
+        self.window.setDefaultView()
+        draw()
+
+
+    def __present_vr(self):
         def iti_with_jitter():
             return self.iti + np.random.rand() * self.jitter
-
-        # Setup the experiment, alternatively could get rid of this line, something to think about
-        self.setup(instructions)
-
-        print("Wait for the EEG-stream to start...")
-
-        # Start EEG Stream, wait for signal to settle, and then pull timestamp for start point
-        if self.eeg:
-            self.eeg.start(self.save_fn, duration=self.record_duration + 5)
-
-        print("EEG Stream started")
 
         # Run trial until a key is pressed or experiment duration has expired.
         start = time()
@@ -184,10 +195,27 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    self.__draw(lambda: self.present_stimulus(current_trial, current_trial))
-                    rendering_trial = current_trial
+                    self.__draw_vr(lambda: self.present_stimulus(current_trial, current_trial))
+
             else:
-                self.__draw(lambda: self.window.flip())
+                self.__draw_vr(lambda: self.window.flip())
+
+
+    def run(self, instructions=True):
+        """ Do the present operation for a bunch of experiments """
+
+        # Setup the experiment, alternatively could get rid of this line, something to think about
+        self.setup(instructions)
+
+        print("Wait for the EEG-stream to start...")
+
+        # Start EEG Stream, wait for signal to settle, and then pull timestamp for start point
+        if self.eeg:
+            self.eeg.start(self.save_fn, duration=self.record_duration + 5)
+
+        print("EEG Stream started")
+
+        self.__present_vr() if self.use_vr else self.__present()
 
         # Clearing the screen for the next trial
         event.clearEvents()
