@@ -22,7 +22,9 @@ keyboard==0.13.5
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
+
 # Oculus/Quest VR support - currently only supported on Windows.
+cython; platform_system == "Windows"
 psychxr; platform_system == "Windows"
 
 # This might try to build from source on linux (since there are no wheels for Linux on PyPI) .
