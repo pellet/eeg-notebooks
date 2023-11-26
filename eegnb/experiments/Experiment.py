@@ -13,8 +13,6 @@ from typing import Callable
 from psychopy import prefs
 from psychopy.tools.rifttools import LibOVRHapticsBuffer
 from psychxr.drivers.libovr import getHapticsInfo
-from psychxr.drivers.libovr.include.libovr_haptics import HAPTICS_BUFFER_SAMPLES_MAX, submitControllerVibration
-from psychxr.drivers.libovr.include.libovr_input import CONTROLLER_TYPE_RTOUCH
 
 #change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
@@ -192,7 +190,7 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    self.__draw(lambda: self.present_stimulus(current_trial, current_trial))
+                    self.__draw(lambda: self.present_stimulus(current_trial))
                     rendering_trial = current_trial
 
             else:
@@ -236,7 +234,7 @@ class BaseExperiment:
             hap = hap
             
         # vibrate right Touch controller
-        haptic_info = submitControllerVibration(controller, buffer)
+        haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
         
         # check haptic info
         if haptic_info is None:
