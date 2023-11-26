@@ -59,14 +59,14 @@ class EEG:
     stream_started: bool = False
 
     def __init__(
-        self,
-        device=None,
-        serial_port=None,
-        serial_num=None,
-        mac_addr=None,
-        other=None,
-        ip_addr=None,
-        replace_ch_names=None
+            self,
+            device=None,
+            serial_port=None,
+            serial_num=None,
+            mac_addr=None,
+            other=None,
+            ip_addr=None,
+            replace_ch_names=None
     ):
         """The initialization function takes the name of the EEG device and determines whether or not
         the device belongs to the Muse or Brainflow families and initializes the appropriate backend.
@@ -371,7 +371,7 @@ class EEG:
         else:
             # otherwise select eeg channel names via brainflow API
             ch_names = BoardShim.get_eeg_names(self.brainflow_id)
-        
+
         # rename/override default channel names
         ch_names = self._rename_channels(ch_names)
 
