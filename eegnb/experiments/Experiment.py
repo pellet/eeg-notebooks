@@ -31,7 +31,7 @@ from eegnb import generate_save_fn
 class BaseExperiment:
 
     def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float,
-                 use_vr=False):
+                 use_vr=False, use_fixation=False):
         """ Initializer for the Base Experiment Class
 
         Args:
@@ -53,6 +53,7 @@ class BaseExperiment:
         self.soa = soa
         self.jitter = jitter
         self.use_vr = use_vr
+        self.use_fixation = use_fixation
 
     @abstractmethod
     def load_stimulus(self):
@@ -92,6 +93,11 @@ class BaseExperiment:
         
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
+
+        if self.use_fixation:
+            grating_sf = 400 if self.use_vr else 0.2
+            self.fixation = visual.GratingStim(win=self.window, pos=[0, 0], sf=grating_sf, rgb=[1, 0, 0])
+            self.fixation.size = 0.02 if self.use_vr else 0.2
         
         # Show Instruction Screen if not skipped by the user
         if instructions:
@@ -172,6 +178,8 @@ class BaseExperiment:
         # Current trial being rendered
         rendering_trial = -1
         
+        # Clear buffer
+        event.getKeys()
         
         while len(event.getKeys()) == 0 and (time() - start) < self.record_duration:
 
@@ -193,7 +201,13 @@ class BaseExperiment:
                     self.__draw(lambda: self.present_stimulus(current_trial))
                     rendering_trial = current_trial
 
+                    if self.use_fixation:
+                        self.fixation.draw()
+                        self.window.flip()
+
             else:
+                if self.use_fixation:
+                    self.fixation.draw()
                 self.__draw(lambda: self.window.flip())
 
         # Clearing the screen for the next trial
