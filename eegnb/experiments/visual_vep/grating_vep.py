@@ -27,10 +27,8 @@ class VisualGratingVEP(Experiment.BaseExperiment):
         # 
         self.markernames = [1, 2]
 
-        grating_sf = 400 if self.use_vr else 0.2
-
-        # self.grating = visual.GratingStim(win=self.window, mask="circle", size=20, sf=grating_sf)
-        self.grating = visual.GratingStim(win=self.window, mask="circle", size=80, sf=grating_sf)
+        self.grating = visual.GratingStim(win=self.window, mask="circle", size=20, 
+                                          sf=8000 if self.use_vr else 4)
         # Setup log
         n_trials = 2000
         position = np.random.randint(0, 2, n_trials)

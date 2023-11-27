@@ -28,7 +28,8 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         # 
         self.markernames = [1, 2]
 
-        load_image = lambda fn: visual.ImageStim(win=self.window, image=fn)
+        load_image = lambda fn: visual.ImageStim(win=self.window, image=fn,
+                                                 size=[2, 2] if self.use_vr else [40, 30])
         self.checkerboard = list(map(load_image, glob(os.path.join(PATTERN_REVERSAL, "checker*.jpeg"))))
 
         self.fixation = visual.GratingStim(win=self.window, size=0.2, pos=[0, 0], sf=0, rgb=[1, 0, 0])
