@@ -342,11 +342,10 @@ class EEG:
         data_df.to_csv(self.save_fn, index=False)
 
     def _rename_channels(self, ch_names):
-        if self.replace_ch_names is not None:
-            return [
-                c if c not in self.replace_ch_names.keys() else self.replace_ch_names[c]
-                for c in ch_names
-            ]
+        return [
+            c if c not in self.replace_ch_names.keys() else self.replace_ch_names[c]
+            for c in ch_names
+        ]
 
     def _brainflow_extract(self, data):
         """
@@ -373,7 +372,8 @@ class EEG:
             ch_names = BoardShim.get_eeg_names(self.brainflow_id)
 
         # rename/override default channel names
-        ch_names = self._rename_channels(ch_names)
+        if self.replace_ch_names is not None:
+            ch_names = self._rename_channels(ch_names)
 
         # pull EEG channel data via brainflow API
         eeg_data = data[:, BoardShim.get_eeg_channels(self.brainflow_id)]
