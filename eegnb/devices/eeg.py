@@ -73,7 +73,7 @@ class EEG:
 
         Parameters:
             device (str): name of eeg device used for reading data.
-
+        
         Keyword Args:
             replace_ch_names (dict or None): dictionary containing a mapping to
             rename channels. Useful when e.g., an external electrode was used.

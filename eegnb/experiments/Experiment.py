@@ -11,6 +11,9 @@ obj.run()
 from abc import abstractmethod
 from typing import Callable
 from psychopy import prefs
+from psychopy.tools.rifttools import LibOVRHapticsBuffer
+from psychxr.drivers.libovr import getHapticsInfo
+
 #change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
 prefs.hardware['audioLatencyMode'] = 3
@@ -28,7 +31,7 @@ from eegnb import generate_save_fn
 class BaseExperiment:
 
     def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float,
-                 use_vr=False):
+                 use_vr=False, use_fixation=False):
         """ Initializer for the Base Experiment Class
 
         Args:
@@ -50,6 +53,7 @@ class BaseExperiment:
         self.soa = soa
         self.jitter = jitter
         self.use_vr = use_vr
+        self.use_fixation = use_fixation
 
     @abstractmethod
     def load_stimulus(self):
@@ -89,6 +93,11 @@ class BaseExperiment:
         
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
+
+        if self.use_fixation:
+            grating_sf = 400 if self.use_vr else 0.2
+            self.fixation = visual.GratingStim(win=self.window, pos=[0, 0], sf=grating_sf, rgb=[1, 0, 0])
+            self.fixation.size = 0.02 if self.use_vr else 0.2
         
         # Show Instruction Screen if not skipped by the user
         if instructions:
@@ -168,8 +177,13 @@ class BaseExperiment:
 
         # Current trial being rendered
         rendering_trial = -1
+        
+        # Clear buffer
+        event.getKeys()
+        
         while len(event.getKeys()) == 0 and (time() - start) < self.record_duration:
 
+        
             current_experiment_seconds = time() - start
             # Do not present stimulus until current trial begins(Adhere to inter-trial interval).
             if current_trial_end < current_experiment_seconds:
@@ -184,9 +198,16 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    self.__draw(lambda: self.present_stimulus(current_trial, current_trial))
+                    self.__draw(lambda: self.present_stimulus(current_trial))
                     rendering_trial = current_trial
+
+                    if self.use_fixation:
+                        self.fixation.draw()
+                        self.window.flip()
+
             else:
+                if self.use_fixation:
+                    self.fixation.draw()
                 self.__draw(lambda: self.window.flip())
 
         # Clearing the screen for the next trial
@@ -199,7 +220,124 @@ class BaseExperiment:
         # Closing the window
         self.window.close()
 
+    def vibrate(self, controller: int, buffer: LibOVRHapticsBuffer):
+        """  Submit a haptics buffer to Touch controllers.
+        Parameters
+        ----------
+        controller : int
+            Controller name. Valid values are:
+            * ``CONTROLLER_TYPE_TOUCH`` : Combined Touch controllers.
+            * ``CONTROLLER_TYPE_LTOUCH`` : Left Touch controller.
+            * ``CONTROLLER_TYPE_RTOUCH`` : Right Touch controller.
+            * ``CONTROLLER_TYPE_OBJECT0`` : Object 0 controller.
+            * ``CONTROLLER_TYPE_OBJECT1`` : Object 1 controller.
+            * ``CONTROLLER_TYPE_OBJECT2`` : Object 2 controller.
+            * ``CONTROLLER_TYPE_OBJECT3`` : Object 3 controller.
+        buffer : LibOVRHapticsBuffer
+            Haptics buffer to submit.
+        Returns
+        -------
+        int
+            Return value of API call ``OVR::ovr_SubmitControllerVibration``. Can
+            return ``SUCCESS_DEVICE_UNAVAILABLE`` if no device is present.
+        """
+
+        # check if controller exists
+        hap = getHapticsInfo()
+        if hap is None:
+            hap = hap
+            
+        # vibrate right Touch controller
+        haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
+        
+        # check haptic info
+        if haptic_info is None:
+            haptic_info = haptic_info
+
+#     def getHapticsInfo(int controller):
+#     """Get information about the haptics engine for a particular controller.
+# 
+#     Parameters
+#     ----------
+#     controller : int
+#         Controller name. Valid values are:
+# 
+#         * ``CONTROLLER_TYPE_XBOX`` : XBox gamepad.
+#         * ``CONTROLLER_TYPE_REMOTE`` : Oculus Remote.
+#         * ``CONTROLLER_TYPE_TOUCH`` : Combined Touch controllers.
+#         * ``CONTROLLER_TYPE_LTOUCH`` : Left Touch controller.
+#         * ``CONTROLLER_TYPE_RTOUCH`` : Right Touch controller.
+#         * ``CONTROLLER_TYPE_OBJECT0`` : Object 0 controller.
+#         * ``CONTROLLER_TYPE_OBJECT1`` : Object 1 controller.
+#         * ``CONTROLLER_TYPE_OBJECT2`` : Object 2 controller.
+#         * ``CONTROLLER_TYPE_OBJECT3`` : Object 3 controller.
+# 
+#     Returns
+#     -------
+#     LibOVRHapticsInfo
+#         Haptics engine information. Values do not change over the course of a
+#         session.
+# 
+#     """
+#     global _ptrSession
+#     cdef LibOVRHapticsInfo to_return = LibOVRHapticsInfo()
+#     to_return.c_data = capi.ovr_GetTouchHapticsDesc(
+#         _ptrSession, <capi.ovrControllerType>controller,)
+# 
+#     return to_return
+# 
+# 
+    
+    #     Parameters
+    #     ----------
+    #     buffer : array_like
+    #         Buffer of samples. Must be a 1D array of floating point values between
+    #         0.0 and 1.0. If an `ndarray` with dtype `float32` is specified, the
+    #         buffer will be set without copying.
+
+
+
+
+
+# global _ptrSession
+# 
+# cdef capi.ovrResult result = capi.ovr_SubmitControllerVibration(
+#     _ptrSession,
+#                              <capi.ovrControllerType>controller,
+# &buffer.c_data)
+# 
+# return result
+
     @property
     def name(self) -> str:
         """ This experiment's name """
         return self.exp_name
+
+
+    
+
+# cdef class LibOVRHapticsBuffer(object):
+#     """Class for haptics buffer data for controller vibration.
+# 
+#     Instances of this class store a buffer of vibration amplitude values which
+#     can be passed to the haptics engine for playback using the
+#     :func:`submitControllerVibration` function. Samples are stored as a 1D array
+#     of 32-bit floating-point values ranging between 0.0 and 1.0, with a maximum
+#     length of ``HAPTICS_BUFFER_SAMPLES_MAX - 1``. You can access this buffer
+#     through the :py:attr:`~LibOVRHapticsBuffer.samples` attribute.
+# 
+#     One can use `Numpy` functions to generate samples for the haptics buffer.
+#     Here is an example were amplitude ramps down over playback::
+# 
+#         samples = np.linspace(
+#             1.0, 0.0, num=HAPTICS_BUFFER_SAMPLES_MAX-1, dtype=np.float32)
+#         hbuff = LibOVRHapticsBuffer(samples)
+#         # vibrate right Touch controller
+#         submitControllerVibration(CONTROLLER_TYPE_RTOUCH, hbuff)
+# 
+#     For information about the haptics engine, such as sampling frequency, call
+#     :func:`getHapticsInfo` and inspect the returned
+#     :py:class:`LibOVRHapticsInfo` object.
+# 
+# 
+#     """
