@@ -39,9 +39,7 @@ class SomatosensoryP300(Experiment.BaseExperiment):
     def present_stimulus(self, idx:int, trial):
 
         label = self.trials["parameter"].iloc[idx]
-        # image = choice(self.targets if label == 1 else self.nontargets)
         controller = choice(CONTROLLER_TYPE_RTOUCH if label == 1 else CONTROLLER_TYPE_LTOUCH)
-        # image.draw()
         samples = np.linspace(
             1.0, 0.0, num=HAPTICS_BUFFER_SAMPLES_MAX-1, dtype=np.float32)
         hbuff = LibOVRHapticsBuffer(samples)

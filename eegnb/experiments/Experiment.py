@@ -12,9 +12,10 @@ from abc import abstractmethod
 from typing import Callable
 from psychopy import prefs
 from psychopy.tools.rifttools import LibOVRHapticsBuffer
+from psychopy.visual.rift import Rift
 from psychxr.drivers.libovr import getHapticsInfo
 
-#change the pref libraty to PTB and set the latency mode to high precision
+# change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
 prefs.hardware['audioLatencyMode'] = 3
 
@@ -53,6 +54,11 @@ class BaseExperiment:
         self.soa = soa
         self.jitter = jitter
         self.use_vr = use_vr
+        if use_vr:
+            self.rift: Rift = visual.Rift(monoscopic=True, headLocked=True)
+            #NOTE: doesnt work for combining both right and left for some reason? need to specify right.
+            #self.vr_controller = 'Touch'
+            self.vr_controller = 'RightTouch'
         self.use_fixation = use_fixation
 
     @abstractmethod
@@ -65,7 +71,7 @@ class BaseExperiment:
         raise NotImplementedError
 
     @abstractmethod
-    def present_stimulus(self, idx : int):
+    def present_stimulus(self, idx: int):
         """
         Method that presents the stimulus for the specific experiment, overwritten by the specific experiment
         Displays the stimulus on the screen
@@ -81,16 +87,16 @@ class BaseExperiment:
         # Initializing the record duration and the marker names
         self.record_duration = np.float32(self.duration)
         self.markernames = [1, 2]
-        
+
         # Setting up the trial and parameter list
         self.parameter = np.random.binomial(1, 0.5, self.n_trials)
         self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
 
         # Setting up Graphics 
         self.window = (
-            visual.Rift(monoscopic=True, headLocked=True) if self.use_vr
+            self.rift if self.use_vr
             else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=True))
-        
+
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
 
@@ -98,24 +104,25 @@ class BaseExperiment:
             grating_sf = 400 if self.use_vr else 0.2
             self.fixation = visual.GratingStim(win=self.window, pos=[0, 0], sf=grating_sf, rgb=[1, 0, 0])
             self.fixation.size = 0.02 if self.use_vr else 0.2
-        
+
         # Show Instruction Screen if not skipped by the user
         if instructions:
             self.show_instructions()
 
         # Checking for EEG to setup the EEG stream
         if self.eeg:
-             # If no save_fn passed, generate a new unnamed save file
-            if self.save_fn is None:  
+            # If no save_fn passed, generate a new unnamed save file
+            if self.save_fn is None:
                 # Generating a random int for the filename
-                random_id = random.randint(1000,10000)
+                random_id = random.randint(1000, 10000)
                 # Generating save function
                 experiment_directory = self.name.replace(' ', '_')
-                self.save_fn = generate_save_fn(self.eeg.device_name, experiment_directory, random_id, random_id, "unnamed")
+                self.save_fn = generate_save_fn(self.eeg.device_name, experiment_directory, random_id, random_id,
+                                                "unnamed")
                 print(
                     f"No path for a save file was passed to the experiment. Saving data to {self.save_fn}"
                 )
-    
+
     def show_instructions(self):
         """ 
         Method that shows the instructions for the specific Experiment
@@ -129,14 +136,44 @@ class BaseExperiment:
         # Disabling the cursor during display of instructions
         self.window.mouseVisible = False
 
-        # Waiting for the user to press the spacebar to start the experiment
-        while len(event.getKeys(keyList="space")) == 0:
+        # clear any key/controller events
+        self.clear_user_input()
+
+        # Waiting for the user to press the spacebar or controller to start the experiment
+        while not self.user_input(key_list="space"):
             # Displaying the instructions on the screen
             text = visual.TextStim(win=self.window, text=self.instruction_text, color=[-1, -1, -1])
             self.__draw(lambda: self.__draw_instructions(text))
 
             # Enabling the cursor again
             self.window.mouseVisible = True
+
+    def user_input(self, key_list=None):
+        if len(event.getKeys(keyList=key_list)) > 0:
+            return True
+        if self.use_vr:
+            return self.get_vr_input(['A', 'B'])
+        return False
+
+    def get_vr_input(self, buttons):
+        trigger = False
+        for x in self.rift.getIndexTriggerValues(self.vr_controller):
+            print(x)
+            if x > 0:
+                trigger = True
+
+        # button_pressed = False
+        # buttons_pressed, tsec = self.rift.getButtons(buttons, self.vr_controller, 'falling')
+        # for is_pressed in buttons_pressed:
+        #     if is_pressed:
+        #         button_pressed = True
+
+        button_pressed, tsec = self.rift.getButtons(buttons, self.vr_controller, 'released')
+        print(button_pressed, tsec)
+        if trigger or button_pressed:
+            return True
+
+        return False
 
     def __draw_instructions(self, text):
         text.draw()
@@ -152,6 +189,11 @@ class BaseExperiment:
             self.window.calcEyePoses(tracking_state.headPose.thePose)
             self.window.setDefaultView()
         present_stimulus()
+
+    def clear_user_input(self):
+        event.getKeys()
+        if self.use_vr:
+            self.rift.updateInputState()
 
     def run(self, instructions=True):
         """ Do the present operation for a bunch of experiments """
@@ -177,13 +219,12 @@ class BaseExperiment:
 
         # Current trial being rendered
         rendering_trial = -1
-        
-        # Clear buffer
-        event.getKeys()
-        
-        while len(event.getKeys()) == 0 and (time() - start) < self.record_duration:
 
-        
+        # Clear user input buffer
+        self.clear_user_input()
+
+        while not self.user_input() and (time() - start) < self.record_duration:
+
             current_experiment_seconds = time() - start
             # Do not present stimulus until current trial begins(Adhere to inter-trial interval).
             if current_trial_end < current_experiment_seconds:
@@ -220,101 +261,24 @@ class BaseExperiment:
         # Closing the window
         self.window.close()
 
+#todo: use higher level rift interface instead
     def vibrate(self, controller: int, buffer: LibOVRHapticsBuffer):
-        """  Submit a haptics buffer to Touch controllers.
-        Parameters
-        ----------
-        controller : int
-            Controller name. Valid values are:
-            * ``CONTROLLER_TYPE_TOUCH`` : Combined Touch controllers.
-            * ``CONTROLLER_TYPE_LTOUCH`` : Left Touch controller.
-            * ``CONTROLLER_TYPE_RTOUCH`` : Right Touch controller.
-            * ``CONTROLLER_TYPE_OBJECT0`` : Object 0 controller.
-            * ``CONTROLLER_TYPE_OBJECT1`` : Object 1 controller.
-            * ``CONTROLLER_TYPE_OBJECT2`` : Object 2 controller.
-            * ``CONTROLLER_TYPE_OBJECT3`` : Object 3 controller.
-        buffer : LibOVRHapticsBuffer
-            Haptics buffer to submit.
-        Returns
-        -------
-        int
-            Return value of API call ``OVR::ovr_SubmitControllerVibration``. Can
-            return ``SUCCESS_DEVICE_UNAVAILABLE`` if no device is present.
-        """
-
         # check if controller exists
         hap = getHapticsInfo()
         if hap is None:
             hap = hap
-            
+
         # vibrate right Touch controller
         haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
-        
+
         # check haptic info
         if haptic_info is None:
             haptic_info = haptic_info
-
-#     def getHapticsInfo(int controller):
-#     """Get information about the haptics engine for a particular controller.
-# 
-#     Parameters
-#     ----------
-#     controller : int
-#         Controller name. Valid values are:
-# 
-#         * ``CONTROLLER_TYPE_XBOX`` : XBox gamepad.
-#         * ``CONTROLLER_TYPE_REMOTE`` : Oculus Remote.
-#         * ``CONTROLLER_TYPE_TOUCH`` : Combined Touch controllers.
-#         * ``CONTROLLER_TYPE_LTOUCH`` : Left Touch controller.
-#         * ``CONTROLLER_TYPE_RTOUCH`` : Right Touch controller.
-#         * ``CONTROLLER_TYPE_OBJECT0`` : Object 0 controller.
-#         * ``CONTROLLER_TYPE_OBJECT1`` : Object 1 controller.
-#         * ``CONTROLLER_TYPE_OBJECT2`` : Object 2 controller.
-#         * ``CONTROLLER_TYPE_OBJECT3`` : Object 3 controller.
-# 
-#     Returns
-#     -------
-#     LibOVRHapticsInfo
-#         Haptics engine information. Values do not change over the course of a
-#         session.
-# 
-#     """
-#     global _ptrSession
-#     cdef LibOVRHapticsInfo to_return = LibOVRHapticsInfo()
-#     to_return.c_data = capi.ovr_GetTouchHapticsDesc(
-#         _ptrSession, <capi.ovrControllerType>controller,)
-# 
-#     return to_return
-# 
-# 
-    
-    #     Parameters
-    #     ----------
-    #     buffer : array_like
-    #         Buffer of samples. Must be a 1D array of floating point values between
-    #         0.0 and 1.0. If an `ndarray` with dtype `float32` is specified, the
-    #         buffer will be set without copying.
-
-
-
-
-
-# global _ptrSession
-# 
-# cdef capi.ovrResult result = capi.ovr_SubmitControllerVibration(
-#     _ptrSession,
-#                              <capi.ovrControllerType>controller,
-# &buffer.c_data)
-# 
-# return result
 
     @property
     def name(self) -> str:
         """ This experiment's name """
         return self.exp_name
-
-
-    
 
 # cdef class LibOVRHapticsBuffer(object):
 #     """Class for haptics buffer data for controller vibration.
