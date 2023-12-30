@@ -158,7 +158,7 @@ class BaseExperiment:
     def get_vr_input(self, buttons):
         trigger = False
         for x in self.rift.getIndexTriggerValues(self.vr_controller):
-            print(x)
+            # print(x)
             if x > 0:
                 trigger = True
 
@@ -169,7 +169,7 @@ class BaseExperiment:
         #         button_pressed = True
 
         button_pressed, tsec = self.rift.getButtons(buttons, self.vr_controller, 'released')
-        print(button_pressed, tsec)
+        # print(button_pressed, tsec)
         if trigger or button_pressed:
             return True
 
