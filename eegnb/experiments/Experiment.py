@@ -158,18 +158,10 @@ class BaseExperiment:
     def get_vr_input(self, buttons):
         trigger = False
         for x in self.rift.getIndexTriggerValues(self.vr_controller):
-            # print(x)
             if x > 0:
                 trigger = True
 
-        # button_pressed = False
-        # buttons_pressed, tsec = self.rift.getButtons(buttons, self.vr_controller, 'falling')
-        # for is_pressed in buttons_pressed:
-        #     if is_pressed:
-        #         button_pressed = True
-
         button_pressed, tsec = self.rift.getButtons(buttons, self.vr_controller, 'released')
-        # print(button_pressed, tsec)
         if trigger or button_pressed:
             return True
 
@@ -279,29 +271,3 @@ class BaseExperiment:
     def name(self) -> str:
         """ This experiment's name """
         return self.exp_name
-
-# cdef class LibOVRHapticsBuffer(object):
-#     """Class for haptics buffer data for controller vibration.
-# 
-#     Instances of this class store a buffer of vibration amplitude values which
-#     can be passed to the haptics engine for playback using the
-#     :func:`submitControllerVibration` function. Samples are stored as a 1D array
-#     of 32-bit floating-point values ranging between 0.0 and 1.0, with a maximum
-#     length of ``HAPTICS_BUFFER_SAMPLES_MAX - 1``. You can access this buffer
-#     through the :py:attr:`~LibOVRHapticsBuffer.samples` attribute.
-# 
-#     One can use `Numpy` functions to generate samples for the haptics buffer.
-#     Here is an example were amplitude ramps down over playback::
-# 
-#         samples = np.linspace(
-#             1.0, 0.0, num=HAPTICS_BUFFER_SAMPLES_MAX-1, dtype=np.float32)
-#         hbuff = LibOVRHapticsBuffer(samples)
-#         # vibrate right Touch controller
-#         submitControllerVibration(CONTROLLER_TYPE_RTOUCH, hbuff)
-# 
-#     For information about the haptics engine, such as sampling frequency, call
-#     :func:`getHapticsInfo` and inspect the returned
-#     :py:class:`LibOVRHapticsInfo` object.
-# 
-# 
-#     """
