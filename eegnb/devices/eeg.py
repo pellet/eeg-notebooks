@@ -57,6 +57,7 @@ brainflow_devices = [
 class EEG:
     device_name: str
     stream_started: bool = False
+    _latency: int = 0
 
     def __init__(
             self,
@@ -91,6 +92,10 @@ class EEG:
         self.sfreq = SAMPLE_FREQS[self.device_name]
         self.channels = EEG_CHANNELS[self.device_name]
         self.replace_ch_names = replace_ch_names
+
+    def set_latency(self, value):
+        print("Getting the 'number' property")
+        self._latency = value
 
     def initialize_backend(self):
         if self.backend == "brainflow":
@@ -383,7 +388,8 @@ class EEG:
 
     def _brainflow_push_sample(self, marker):
         last_timestamp = self.board.get_current_board_data(1)[self.timestamp_channel][0]
-        self.markers.append([marker, last_timestamp])
+        normalized_timestamp = last_timestamp + self._latency
+        self.markers.append([marker, normalized_timestamp])
 
     def _brainflow_get_recent(self, n_samples=256):
 
