@@ -38,3 +38,6 @@ install-deps-wxpython:
 	# Install wxPython wheels since they are distribution-specific and therefore not on PyPI
 	# See: https://wxpython.org/pages/downloads/index.html
 	pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04 wxPython
+
+install-tables:
+	conda install pytables
