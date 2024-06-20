@@ -2,6 +2,7 @@
 from glob import glob
 from time import time
 
+import pandas as pd
 from psychopy import visual
 from pylsl import StreamInfo, StreamOutlet
 from typing import Optional
@@ -24,6 +25,8 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         # next make an outlet
         self.outlet = StreamOutlet(info)
 
+        self.latency = {}
+
     def load_stimulus(self):
         # 
         self.markernames = [1, 2]
@@ -44,10 +47,12 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         self.outlet.push_sample([self.markernames[checkerboard_frame]], time())
 
         # Record the latency of the graphics displaying on the HUD
-        perf_stats = super().rift._perfStats
-        if perf_stats.frameStatsCount > 0:
-            recent_stat = perf_stats.frameStats[0]
-            self.eeg.set_latency(recent_stat.compositorLatency)
+        if super().use_vr:
+            perf_stats = super().rift._perfStats
+            if perf_stats.frameStatsCount > 0:
+                recent_stat = perf_stats.frameStats[0]
+                self.latency['timestamps'].append(time())
+                self.latency['latency_seconds'].append(recent_stat.compositorLatency)
 
         # Pushing the sample to the EEG
         if self.eeg:
@@ -56,3 +61,7 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
             else:
                 marker = self.markernames[checkerboard_frame]
             self.eeg.push_sample(marker=marker, timestamp=time())
+
+    def save_metadata(self, file_path):
+        data_df = pd.DataFrame(self.latency)
+        data_df.to_csv(file_path, index=False)
