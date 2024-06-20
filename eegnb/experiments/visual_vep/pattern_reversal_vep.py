@@ -43,6 +43,12 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
 
         self.outlet.push_sample([self.markernames[checkerboard_frame]], time())
 
+        # Record the latency of the graphics displaying on the HUD
+        perf_stats = super().rift._perfStats
+        if perf_stats.frameStatsCount > 0:
+            recent_stat = perf_stats.frameStats[0]
+            self.eeg.set_latency(recent_stat.compositorLatency)
+
         # Pushing the sample to the EEG
         if self.eeg:
             if self.eeg.backend == "muselsl":

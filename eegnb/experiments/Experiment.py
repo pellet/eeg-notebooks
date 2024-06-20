@@ -180,11 +180,6 @@ class BaseExperiment:
             tracking_state = self.window.getTrackingState()
             self.window.calcEyePoses(tracking_state.headPose.thePose)
             self.window.setDefaultView()
-            # Record the latency of the graphics displaying on the HUD
-            perf_stats = self.rift._perfStats
-            if perf_stats.frameStatsCount > 0:
-                recent_stat = perf_stats.frameStats[0]
-                self.eeg.set_latency(recent_stat.compositorLatency)
 
         present_stimulus()
 
