@@ -1,8 +1,6 @@
 
 ## ~~ Analysis Requirements ~~ 
 
-#keyboard requires pyobjc, psychopy requires version less than 8.
-pyobjc==7.3; platform_system == "macOS"
 scikit-learn>=0.23.2
 pandas>=1.1.4
 numpy>=1.19.4,<1.24  # due to outdated libs not changing the names after: https://github.com/numpy/numpy/pull/22607
@@ -17,6 +15,9 @@ pyserial>=3.5
 h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
+#keyboard requires pyobjc, psychopy requires version less than 8, setting pyobjc to
+# a specific version prevents dependency resolution deadlock.
+pyobjc==7.3
 keyboard==0.13.5
 #keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
 #keyboard==0.13.6; platform_system == "macOS"
@@ -27,8 +28,6 @@ attrdict3
 
 ## ~~ Streaming Requirements ~~ 
 
-#keyboard requires pyobjc, psychopy requires version less than 8.
-pyobjc==7.3; platform_system == "macOS"
 muselsl>=2.0.2
 pylsl==1.10.5  # due to https://github.com/NeuroTechX/eeg-notebooks/issues/187
 brainflow>=4.8.2
@@ -37,6 +36,9 @@ pyserial>=3.5
 h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
+#keyboard requires pyobjc, psychopy requires version less than 8, setting pyobjc to
+# a specific version prevents dependency resolution deadlock.
+pyobjc==7.3
 keyboard==0.13.5
 #keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
 #keyboard==0.13.6; platform_system == "macOS"
@@ -47,8 +49,10 @@ click
 
 
 ## ~~ Stimpres Requirements ~~
-#keyboard requires pyobjc, psychopy requires version less than 8.
-pyobjc==7.3; platform_system == "macOS"
+
+#keyboard requires pyobjc, psychopy requires version less than 8, setting pyobjc to
+# a specific version prevents dependency resolution deadlock.
+pyobjc==7.3
 #upgrade psychopy to use newer wxpython dependency which is prebuilt for m1 support.
 psychopy==2023.2.2
 psychtoolbox
