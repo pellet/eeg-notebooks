@@ -17,7 +17,7 @@ pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 #keyboard requires pyobjc, psychopy requires version less than 8, setting pyobjc to
 # a specific version prevents dependency resolution deadlock.
-pyobjc==7.3
+pyobjc==7.3; sys_platform == 'darwin'
 keyboard==0.13.5
 #keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
 #keyboard==0.13.6; platform_system == "macOS"
@@ -52,7 +52,7 @@ click
 
 #keyboard requires pyobjc, psychopy requires version less than 8, setting pyobjc to
 # a specific version prevents dependency resolution deadlock.
-pyobjc==7.3
+pyobjc==7.3; sys_platform == 'darwin'
 #upgrade psychopy to use newer wxpython dependency which is prebuilt for m1 support.
 psychopy==2023.2.2
 psychtoolbox

@@ -73,7 +73,7 @@ jobs:
       run: |
         make build
     - name: Run eegnb install test
-      shell: bash
+      shell: bash -el {0}
       run: |
         if [ "$RUNNER_OS" == "Linux" ]; then
           Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &> xvfb.log &
@@ -82,7 +82,7 @@ jobs:
         eegnb --help
         eegnb runexp --help
     - name: Run examples with coverage
-      shell: bash
+      shell: bash -el {0}
       run: |
         if [ "$RUNNER_OS" == "Linux" ]; then
           Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &> xvfb.log &
