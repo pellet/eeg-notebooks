@@ -52,6 +52,18 @@ jobs:
       if: "startsWith(runner.os, 'Linux')"
       run: |
         make install-deps-wxpython
+    - name: Install MacOS dependencies
+      if: runner.os == 'macOS'
+      uses: goanpeca/setup-miniconda@v3
+      with:
+        auto-activate-base: true
+        python-version: 3.8
+        activate-environment: EEG-ExPy
+        channels: conda-forge
+        miniconda-version: "latest"
+    - name: Install PyTables via Conda for MacOS
+      if: runner.os == 'macOS'
+      run: conda install -y pytables
     - name: Install dependencies
       run: |
         make build
@@ -99,18 +111,6 @@ jobs:
       if: "startsWith(runner.os, 'Linux')"
       run: |
         make install-deps-wxpython
-    - name: Install MacOS dependencies
-      if: runner.os == 'macOS'
-      uses: goanpeca/setup-miniconda@v3
-      with:
-        auto-activate-base: true
-        python-version: 3.8
-        activate-environment: EEG-ExPy
-        channels: conda-forge
-        miniconda-version: "latest"
-    - name: Install PyTables via Conda for MacOS
-      if: runner.os == 'macOS'
-      run: conda install -y pytables
     - name: Install dependencies
       run: |
         make build
