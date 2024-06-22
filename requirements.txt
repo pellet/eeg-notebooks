@@ -2,7 +2,7 @@
 ## ~~ Analysis Requirements ~~ 
 
 #keyboard requires pyobjc, psychopy requires version less than 8.
-#pyobjc==7.3; platform_system == "macOS"
+pyobjc==7.3; platform_system == "macOS"
 scikit-learn>=0.23.2
 pandas>=1.1.4
 numpy>=1.19.4,<1.24  # due to outdated libs not changing the names after: https://github.com/numpy/numpy/pull/22607
