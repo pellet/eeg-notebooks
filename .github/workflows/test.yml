@@ -63,10 +63,13 @@ jobs:
         miniconda-version: "latest"
     - name: Install PyTables via Conda for MacOS
       if: runner.os == 'macOS'
+      shell: bash -el {0}
       run: |
+        conda info
         conda activate EEG-ExPy
         conda install -y pytables
     - name: Install dependencies
+      shell: bash -el {0}
       run: |
         make build
     - name: Run eegnb install test
