@@ -100,7 +100,7 @@ jobs:
       run: |
         make install-deps-wxpython
     - name: Install MacOS dependencies
-      if: "startsWith(runner.os, 'MacOS')"
+      if: runner.os == 'macOS'
       uses: goanpeca/setup-miniconda@v3
       with:
         auto-activate-base: true
@@ -109,7 +109,7 @@ jobs:
         channels: conda-forge
         miniconda-version: "latest"
     - name: Install PyTables via Conda for MacOS
-      if: "startsWith(runner.os, 'MacOS')"
+      if: runner.os == 'macOS'
       run: conda install -y pytables
     - name: Install dependencies
       run: |
