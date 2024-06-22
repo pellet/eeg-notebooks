@@ -99,15 +99,18 @@ jobs:
       if: "startsWith(runner.os, 'Linux')"
       run: |
         make install-deps-wxpython
-    - name: Install PyTables via micromamba for MacOS
-      if: "startsWith(runner.os, 'macOS')"
-      run: |
-        brew install micromamba
-        /opt/homebrew/opt/micromamba/bin/micromamba shell init -s bash -p ~/micromamba
-        source ~/.bash_profile
-        micromamba create -y -n EEG-ExPy
-        micromamba activate EEG-ExPy
-        micromamba install -y pytables
+    - name: Install MacOS dependencies
+      if: "startsWith(runner.os, 'MacOS')"
+      uses: goanpeca/setup-miniconda@v3
+      with:
+        auto-activate-base: true
+        python-version: 3.8
+        activate-environment: EEG-ExPy
+        channels: conda-forge
+        miniconda-version: "latest"
+    - name: Install PyTables via Conda for MacOS
+      if: "startsWith(runner.os, 'MacOS')"
+      run: conda install -y pytables
     - name: Install dependencies
       run: |
         make build
