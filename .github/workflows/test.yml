@@ -54,7 +54,7 @@ jobs:
         make install-deps-wxpython
     - name: Install MacOS dependencies
       if: runner.os == 'macOS'
-      uses: goanpeca/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v3
       with:
         auto-activate-base: true
         python-version: 3.8
