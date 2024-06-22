@@ -2,7 +2,7 @@
 ## ~~ Analysis Requirements ~~ 
 
 #keyboard requires pyobjc, psychopy requires version less than 8.
-pyobjc==7.3; platform_system == "macOS"
+#pyobjc==7.3; platform_system == "macOS"
 scikit-learn>=0.23.2
 pandas>=1.1.4
 numpy>=1.19.4,<1.24  # due to outdated libs not changing the names after: https://github.com/numpy/numpy/pull/22607
@@ -38,6 +38,8 @@ h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 keyboard==0.13.5
+#keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
+#keyboard==0.13.6; platform_system == "macOS"
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
@@ -59,8 +61,6 @@ pyserial>=3.5
 h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
-#keyboard requires pyobjc, psychopy requires version less than 8.
-pyobjc==7.3; platform_system == "macOS"
 keyboard==0.13.5
 #keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
 #keyboard==0.13.6; platform_system == "macOS"

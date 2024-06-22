@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master, develop, 'dev/*' ]
   pull_request:
     branches: [ master, develop ]
 
@@ -99,6 +99,18 @@ jobs:
       if: "startsWith(runner.os, 'Linux')"
       run: |
         make install-deps-wxpython
+    - name: Install MacOS dependencies
+      if: "startsWith(runner.os, 'macOS')"
+      uses: goanpeca/setup-miniconda@v3
+      with:
+        auto-activate-base: true
+        python-version: 3.9  # You can specify your Python version here
+        activate-environment: myenv
+        channels: conda-forge
+        miniconda-version: "latest"
+    - name: Install PyTables via Conda for MacOS
+      if: "startsWith(runner.os, 'macOS')"
+      run: conda install -y pytables
     - name: Install dependencies
       run: |
         make build
