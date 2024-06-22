@@ -16,6 +16,8 @@ h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 keyboard==0.13.5
+#keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
+#keyboard==0.13.6; platform_system == "macOS"
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
@@ -40,7 +42,10 @@ click
 
 ## ~~ Stimpres Requirements ~~ 
 
-psychopy==2023.1.0
+#psychopy requires version less than pyobjc v8.
+#pyobjc==7.3; platform_system == "macOS"
+#upgrade psychopy to use newer wxpython dependency which is prebuilt for m1 support.
+psychopy==2023.2.2
 psychtoolbox
 scikit-learn>=0.23.2
 pandas>=1.1.4
@@ -53,6 +58,8 @@ h5py>=3.1.0
 pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 keyboard==0.13.5
+#keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
+#keyboard==0.13.6; platform_system == "macOS"
 airium>=0.1.0
 attrdict>=2.0.1
 attrdict3
