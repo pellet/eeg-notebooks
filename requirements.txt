@@ -46,8 +46,9 @@ attrdict3
 click
 
 
-## ~~ Stimpres Requirements ~~ 
-
+## ~~ Stimpres Requirements ~~
+#keyboard requires pyobjc, psychopy requires version less than 8.
+pyobjc==7.3; platform_system == "macOS"
 #upgrade psychopy to use newer wxpython dependency which is prebuilt for m1 support.
 psychopy==2023.2.2
 psychtoolbox
