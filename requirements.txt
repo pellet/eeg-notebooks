@@ -29,7 +29,7 @@ attrdict3
 ## ~~ Streaming Requirements ~~ 
 
 muselsl>=2.0.2
-pylsl==1.10.5  # due to https://github.com/NeuroTechX/eeg-notebooks/issues/187
+pylsl==1.16.2 # Upgrade from 1.10.5 to 1.16.2 so arm64 lib is available for macOS.
 brainflow>=4.8.2
 pysocks>=1.7.1
 pyserial>=3.5
@@ -38,7 +38,7 @@ pytest-shutil
 pyo>=1.0.3; platform_system == "Linux"
 #keyboard requires pyobjc, psychopy requires version less than 8, setting pyobjc to
 # a specific version prevents dependency resolution deadlock.
-pyobjc==7.3
+pyobjc==7.3; sys_platform == 'darwin'
 keyboard==0.13.5
 #keyboard was crashing on Carbon.CFDataGetBytes(k_layout, CFRange(0, k_layout_size), ctypes.byref(k_layout_buffer))
 #keyboard==0.13.6; platform_system == "macOS"
