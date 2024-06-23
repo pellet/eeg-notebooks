@@ -22,6 +22,10 @@ jobs:
           #- os: ubuntu-latest
           #  python_version: 3.9
 
+          # Ensure Intel macOS builds
+          - os: macos-14-large
+            python_version: '3.8'
+            
           # Check 3.10 for future-proofing
           - os: ubuntu-22.04
             python_version: '3.10'
@@ -67,7 +71,11 @@ jobs:
       run: |
         conda info
         conda activate EEG-ExPy
+        # install pytables for arm64 so do not need to build from source.
         conda install -y pytables
+        # install arm64 version to prevent error:
+        # pylsl/liblsl64.dylib' (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64e' or 'arm64'))
+        # conda install -y liblsl
     - name: Install dependencies
       shell: bash -el {0}
       run: |

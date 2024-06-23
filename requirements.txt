@@ -29,7 +29,9 @@ attrdict3
 ## ~~ Streaming Requirements ~~ 
 
 muselsl>=2.0.2
-pylsl==1.16.2 # Upgrade from 1.10.5 to 1.16.2 so arm64 lib is available for macOS.
+# Upgrade from 1.10.5 to 1.16.2 so arm64 lib is available for macOS, to prevent error:
+# pylsl/liblsl64.dylib' (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64e' or 'arm64'))
+pylsl==1.16.2 
 brainflow>=4.8.2
 pysocks>=1.7.1
 pyserial>=3.5
