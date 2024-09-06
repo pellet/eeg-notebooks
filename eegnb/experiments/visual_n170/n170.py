@@ -17,6 +17,7 @@ from eegnb.experiments import Experiment
 from typing import Optional
 
 
+
 class VisualN170(Experiment.BaseExperiment):
 
     def __init__(self, duration=120, eeg: Optional[EEG] = None, save_fn=None,

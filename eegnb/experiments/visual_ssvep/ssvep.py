@@ -1,3 +1,4 @@
+
 from eegnb.experiments import Experiment
 import os
 from time import time
@@ -8,6 +9,7 @@ import numpy as np
 from pandas import DataFrame
 from psychopy import visual, core, event
 
+
 from eegnb.devices.eeg import EEG
 from eegnb import generate_save_fn
 from typing import Optional
@@ -15,9 +17,8 @@ from typing import Optional
 
 class VisualSSVEP(Experiment.BaseExperiment):
 
-    def __init__(self, duration=120, eeg: Optional[EEG] = None, save_fn=None, n_trials=2010, iti=0.5, soa=3.0,
-                 jitter=0.2, use_vr=False):
-
+    def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.5, soa = 3.0, jitter = 0.2, use_vr=False):
+        
         self.use_vr = use_vr
         exp_name = "Visual SSVEP"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr, use_fixation=True)
@@ -30,10 +31,10 @@ class VisualSSVEP(Experiment.BaseExperiment):
 
         # Generate the possible ssvep frequencies based on monitor refresh rate
         def get_possible_ssvep_freqs(frame_rate, stim_type="single"):
-
+            
             max_period_nb = int(frame_rate / 6)
             periods = np.arange(max_period_nb) + 1
-
+            
             if stim_type == "single":
                 freqs = dict()
                 for p1 in periods:
@@ -50,11 +51,11 @@ class VisualSSVEP(Experiment.BaseExperiment):
             return freqs
 
         def init_flicker_stim(frame_rate, cycle, soa):
-
+            
             if isinstance(cycle, tuple):
                 stim_freq = frame_rate / sum(cycle)
                 n_cycles = int(soa * stim_freq)
-
+            
             else:
                 stim_freq = frame_rate / cycle
                 cycle = (cycle, cycle)
@@ -72,7 +73,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
             init_flicker_stim(frame_rate, 2, self.soa),
             init_flicker_stim(frame_rate, 3, self.soa),
         ]
-
+        
         print(
             (
                 "Flickering frequencies (Hz): {}\n".format(
@@ -80,6 +81,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
                 )
             )
         )
+
 
         return [
             init_flicker_stim(frame_rate, 2, self.soa),
@@ -120,8 +122,4 @@ class VisualSSVEP(Experiment.BaseExperiment):
                 self.grating_neg.draw()
                 self.fixation.draw()
                 self.window.flip()
-
-        if self.use_vr:
-            tracking_state = self.window.getTrackingState()
-            self.window.calcEyePoses(tracking_state.headPose.thePose)
-            self.window.setDefaultView()
+        pass

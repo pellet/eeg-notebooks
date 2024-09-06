@@ -1,5 +1,8 @@
 import numpy as np
 from pandas import DataFrame
+from psychopy import prefs
+# PTB does not yet support macOS Apple Silicon, need to fall back to sounddevice.
+prefs.hardware['audioLib'] = ['sounddevice']
 from psychopy import visual, core, event, sound
 
 from time import time
@@ -8,9 +11,11 @@ from eegnb.experiments import Experiment
 from typing import Optional
 
 
+
 class AuditoryOddball(Experiment.BaseExperiment):
     
     def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.3, soa = 0.2, jitter = 0.2, secs=0.2, volume=0.8, random_state=42, s1_freq="C", s2_freq="D", s1_octave=5, s2_octave=6):
+
         """
 
         Auditory Oddball Experiment
