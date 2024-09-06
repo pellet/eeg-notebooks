@@ -22,7 +22,7 @@ from mne.time_frequency import tfr_morlet
 
 # EEG-Notebooks functions
 from eegnb.datasets import datasets
-from eegnb.analysis.utils import load_data
+from eegnb.analysis.analysis_utils import load_data
 
 # sphinx_gallery_thumbnail_number = 1
 
@@ -123,7 +123,7 @@ for sub in subs:
     # Left Cue
     tfr, itc = tfr_morlet(epochs['LeftCue'], freqs=frequencies, 
                           n_cycles=wave_cycles, return_itc=True)
-    tfr = tfr.apply_baseline([-1,-.5],mode='mean')
+    tfr = tfr.apply_baseline((-1,-.5),mode='mean')
     #tfr.plot(picks=[0], mode='logratio', 
     #         title='TP9 - Ipsi');
     #tfr.plot(picks=[3], mode='logratio', 
@@ -134,7 +134,7 @@ for sub in subs:
     # Right Cue
     tfr, itc = tfr_morlet(epochs['RightCue'], freqs=frequencies, 
                           n_cycles=wave_cycles, return_itc=True)
-    tfr = tfr.apply_baseline([-1,-.5],mode='mean')
+    tfr = tfr.apply_baseline((-1,-.5),mode='mean')
     #tfr.plot(picks=[0], mode='logratio', 
     #         title='TP9 - Contra');
     #tfr.plot(picks=[3], mode='logratio', 

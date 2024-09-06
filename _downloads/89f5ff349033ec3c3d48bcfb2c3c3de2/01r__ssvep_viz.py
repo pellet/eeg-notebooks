@@ -4,7 +4,7 @@ SSVEP Visualization
 
 This example demonstrates loading, organizing, and visualizing data from the steady-state visual evoked potentials (SSVEP) experiment. 
 
-The data used is the first subject and first session of the one of the eeg-notebooks ssvep example datasets, recorded using the InteraXon MUSE EEG headset (2016 model). This session consists of six two-minute blocks of continuous recording.  
+The data used is the first subject and first session of the one of the eeg-expy ssvep example datasets, recorded using the InteraXon MUSE EEG headset (2016 model). This session consists of six two-minute blocks of continuous recording.  
 
 We first use the `fetch_datasets` to obtain a list of filenames. If these files are not already present 
 in the specified data directory, they will be quickly downloaded from the cloud. 
@@ -26,10 +26,10 @@ from matplotlib import pyplot as plt
 
 # MNE functions
 from mne import Epochs,find_events
-from mne.time_frequency import psd_welch,tfr_morlet
+from mne.time_frequency import tfr_morlet
 
 # EEG-Notebooks functions
-from eegnb.analysis.utils import load_data,plot_conditions
+from eegnb.analysis.analysis_utils import load_data,plot_conditions
 from eegnb.datasets import fetch_dataset
 
 # sphinx_gallery_thumbnail_number = 3
@@ -38,7 +38,7 @@ from eegnb.datasets import fetch_dataset
 # Load Data
 # ---------------------
 #
-# We will use the eeg-notebooks SSVEP example dataset
+# We will use the eeg-expy SSVEP example dataset
 #
 # Note that if you are running this locally, the following cell will download
 # the example dataset, if you do not already have it.
@@ -59,6 +59,7 @@ raw = load_data(subject, session,
                 experiment='visual-SSVEP', site='eegnb_examples', device_name='muse2016',
                 data_dir = eegnb_data_path,
                 replace_ch_names={'Right AUX': 'POz'})
+raw.set_channel_types({'POz': 'eeg'})
 
 ###################################################################################################
 # Visualize the power spectrum
@@ -87,8 +88,14 @@ print('sample drop %: ', (1 - len(epochs.events)/len(events)) * 100)
 # Next, we can compare the PSD of epochs specifically during 20hz and 30hz stimulus presentation
 
 f, axs = plt.subplots(2, 1, figsize=(10, 10))
-psd1, freq1 = psd_welch(epochs['30 Hz'], n_fft=1028, n_per_seg=256 * 3, picks='all')
-psd2, freq2 = psd_welch(epochs['20 Hz'], n_fft=1028, n_per_seg=256 * 3, picks='all')
+
+welch_params=dict(method='welch',
+                  n_fft=1028,
+                  n_per_seg=256 * 3,
+                  picks='all')
+
+psd1, freq1 = epochs['30 Hz'].compute_psd(**welch_params).get_data(return_freqs=True)
+psd2, freq2 = epochs['20 Hz'].compute_psd(**welch_params).get_data(return_freqs=True)
 psd1 = 10 * np.log10(psd1)
 psd2 = 10 * np.log10(psd2)
 
@@ -139,6 +146,8 @@ tfr, itc = tfr_morlet(epochs['20 Hz'], freqs=frequencies,picks='all',
 tfr.plot(picks=[4], baseline=(-0.5, -0.1), mode='logratio', 
                  title='POz - 20 Hz stim');
 
+# Set Layout engine to tight to fix error with using colorbar layout error
+plt.figure().set_layout_engine('tight');
 plt.tight_layout()
 
 # Once again we can see clear SSVEPs at 30hz and 20hz

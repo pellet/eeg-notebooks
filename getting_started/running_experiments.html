@@ -1,105 +1,63 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Running Experiments &mdash; EEG Notebooks 0.0.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/theme_override.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
-
-  
-  
-  
-  
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme_override.css?v=0d929ddc" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
 
   
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
-        <script src="../_static/clipboard.min.js"></script>
-        <script src="../_static/copybutton.js"></script>
-        <script src="../_static/debug.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=464912d9"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=a56c686a"></script>
+        <script src="../_static/debug.js?v=63710f7d"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Zipping" href="data_zipper.html" />
     <link rel="prev" title="Initiating an EEG Stream" href="streaming.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-          
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> EEG Notebooks
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            EEG Notebooks
           </a>
-
-          
-            
-            
               <div class="version">
                 0.2.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installing-the-python-library">Installing the Python library</a></li>
@@ -125,7 +83,8 @@
 <li class="toctree-l3"><a class="reference internal" href="streaming.html#openbci-ganglion">OpenBCI Ganglion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="streaming.html#openbci-cyton">OpenBCI Cyton</a></li>
 <li class="toctree-l3"><a class="reference internal" href="streaming.html#openbci-cyton-daisy">OpenBCI Cyton + Daisy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="streaming.html#neurosity-notion-versions-1-and-2">Neurosity Notion (versions 1 and 2)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="streaming.html#neurosity-notion-versions-1-and-2">Neurosity Notion (versions 1 and 2)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streaming.html#neurosity-crown">Neurosity Crown</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="streaming.html#connecting-on-windows">Connecting on Windows</a></li>
 </ul>
 </li>
@@ -150,6 +109,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#using-jupyter-notebooks-or-a-custom-script">Using Jupyter Notebooks or a custom script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-virtual-reality">Using virtual reality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heads-up-display">Heads up display</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#features-to-be-added-in-future-releases">Features to be added in future releases:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1"></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#steps-for-running-experiment-in-vr">Steps for running experiment in VR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-experiments-can-have-vr-added-too">Other experiments can have VR added too.</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="data_zipper.html">Data Zipping</a><ul>
@@ -158,32 +128,31 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analyzing data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="available_notebooks.html">Available Notebooks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="available_notebooks.html#visual-p300-with-oddball-paradigm">Visual P300 with Oddball paradigm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="available_notebooks.html#n170">N170</a></li>
-<li class="toctree-l2"><a class="reference internal" href="available_notebooks.html#ssvep">SSVEP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="available_notebooks.html#old-notebooks">Old Notebooks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#go-no-go">Go/No-Go</a></li>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#ssaep">SSAEP</a></li>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#c1-and-p1">C1 and P1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#auditory-p300">Auditory P300</a></li>
+<li class="toctree-l1"><a class="reference internal" href="available_experiments.html">Available Experiments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="available_experiments.html#visual-p300-with-oddball-paradigm">Visual P300 with Oddball paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available_experiments.html#n170">N170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available_experiments.html#ssvep">SSVEP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available_experiments.html#old-experiments">Old experiments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#go-no-go">Go/No-Go</a></li>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#ssaep">SSAEP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#c1-and-p1">C1 and P1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#auditory-p300">Auditory P300</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="available_notebooks.html#unvalidated-experiments-and-other-phenomena">Unvalidated Experiments and other phenomena</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#n100-p200">N100 - P200</a></li>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#on-task-beta">On-task Beta</a></li>
-<li class="toctree-l3"><a class="reference internal" href="available_notebooks.html#alpha-reset">Alpha reset</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="available_experiments.html#unvalidated-experiments-and-other-phenomena">Unvalidated Experiments and other phenomena</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#n100-p200">N100 - P200</a></li>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#on-task-beta">On-task Beta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="available_experiments.html#alpha-reset">Alpha reset</a></li>
 </ul>
 </li>
 </ul>
-<p><span class="caption-text">Experiments</span></p>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Experiments</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../experiments/vn170.html">Visual N170</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html">N170 run experiment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html#setup">Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html#initiate-eeg-device">Initiate EEG device</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html#run-experiment">Run experiment</a></li>
 </ul>
 </li>
@@ -337,7 +306,6 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html">N170 run experiment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html#setup">Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html#initiate-eeg-device">Initiate EEG device</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/visual_n170/00x__n170_run_experiment.html#run-experiment">Run experiment</a></li>
 </ul>
 </li>
@@ -405,7 +373,7 @@
 </ul>
 </li>
 </ul>
-<p><span class="caption-text">Misc</span></p>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../misc/muse_info.html">Technical Information about the MUSE</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../misc/muse_info.html#muse-setup-and-usage">MUSE setup and usage</a><ul>
@@ -418,75 +386,74 @@
 <li class="toctree-l2"><a class="reference internal" href="../misc/muse_info.html#details-related-to-muse-erp-analysis">Details related to Muse ERP analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../misc/about_the_docs.html">About the EEG-notebooks Documentation Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/about_the_docs.html">About the EEG-ExPy Documentation Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html">NTCS Phase 1 Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#on-this-page">On this page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#instructional-videos">Instructional Videos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#summary-of-the-steps">Summary of the steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#tl-dr-instructions-version">TL;DR instructions version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#full-step-by-step-instructions">Full step-by-step instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#sign-up-and-provide-informed-consent">1. Sign up and provide informed consent.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#check-your-e-mail">2. Check your e-mail.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#install-miniconda">3. Install miniconda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#set-up-environment-and-install-eeg-expy">4. Set up environment and install eeg-expy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#set-up-your-eeg-device">5. Set up your EEG Device</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#windows-muse-device-users">5.1 Windows+Muse device users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#openbci-devices">5.2 OpenBCI Devices</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#run-the-visual-n170-experiment">6. Run the visual N170 experiment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#check-your-signal-quality">6.1 Check your signal quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#run-the-experiment">6.2 Run the experiment</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#after-recording-locate-and-zip-your-recorded-data">7. After recording, locate and zip your recorded data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#take-a-look-at-what-s-there">7.1 Take a look at what’s there</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#compress-your-data">7.2 Compress your data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#upload-your-zipped-data-file-to-your-personalized-url">8. Upload your zipped data file to your personalized URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#make-use-of-your-newfangled-knowledge">9. Make use of your newfangled knowledge!</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#faqs-troubleshooting-gotchas">FAQs, Troubleshooting, Gotchas</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#where-are-my-files">Where are my files?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#openbci-ports-and-drivers">OpenBCI Ports and drivers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/ntcs_phase1_instructions.html#python-is-not-3-7">Python is not 3.7</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">EEG Notebooks</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Running Experiments</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running Experiments</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="running-experiments">
-<h1>Running Experiments<a class="headerlink" href="#running-experiments" title="Permalink to this headline">¶</a></h1>
+<h1>Running Experiments<a class="headerlink" href="#running-experiments" title="Permalink to this heading"></a></h1>
 <p>After you have installed the library there are two methods for collecting data. The first is using the command line tool with the flags detailed below. This is the easiest and recommended for users without much programming experience. The other method involves calling the experiment presentations from within a jupyter notebook (or custom python script).</p>
 <section id="command-line-interface">
-<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h2>
+<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this heading"></a></h2>
 <p>To activate the command line tool, open a command/terminal prompt and enter <code class="docutils literal notranslate"><span class="pre">eegnb</span> <span class="pre">runexp</span></code> followed by the appropriate flags for your device, desired experiment, and more. The possible flags are</p>
 <ul class="simple">
 <li><p><em>-ed ; –eegdevice</em>: The device being used to record data. Each device has a specific string to be passed which can be seen on the <a class="reference external" href="https://neurotechx.github.io/eeg-notebooks/getting_started/streaming.html">Initiating an EEG Stream</a> under the <code class="docutils literal notranslate"><span class="pre">EEG.device</span></code> parameter for the respective device.</p></li>
@@ -497,13 +464,13 @@
 <li><p><em>-ip ; –prompt</em>: Bypass the other flags to activate an interactive prompt.</p></li>
 </ul>
 <section id="using-the-introprompt-flag">
-<h3>Using the introprompt flag<a class="headerlink" href="#using-the-introprompt-flag" title="Permalink to this headline">¶</a></h3>
+<h3>Using the introprompt flag<a class="headerlink" href="#using-the-introprompt-flag" title="Permalink to this heading"></a></h3>
 <p>If using the <code class="docutils literal notranslate"><span class="pre">-ip</span></code> flag the user will be prompted to input the various session parameters. The prompts are detailed below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eegnb</span> <span class="n">runexp</span> <span class="o">-</span><span class="n">ip</span>
 </pre></div>
 </div>
 <section id="board-selection">
-<h4>Board Selection<a class="headerlink" href="#board-selection" title="Permalink to this headline">¶</a></h4>
+<h4>Board Selection<a class="headerlink" href="#board-selection" title="Permalink to this heading"></a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">NeurotechX</span> <span class="n">EEG</span> <span class="n">Notebooks</span><span class="o">.</span> 
 <span class="n">Please</span> <span class="n">enter</span> <span class="n">the</span> <span class="n">integer</span> <span class="n">value</span> <span class="n">corresponding</span> <span class="n">to</span> <span class="n">your</span> <span class="n">EEG</span> <span class="n">device</span><span class="p">:</span> 
 <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="kc">None</span> 
@@ -524,7 +491,7 @@
 <p>Here you specify which of the supported boards you are using to collect data. EEG Notebooks supports a number of different consumer boards with various backends. This step ensures that the proper backend and device parameters are used. <strong>If you are using an OpenBCI board</strong> there will be an additional prompt asking for the desired connection method. Right now it is recommended to use the USB dongle over the wifi shield.</p>
 </section>
 <section id="experiment-selection">
-<h4>Experiment Selection<a class="headerlink" href="#experiment-selection" title="Permalink to this headline">¶</a></h4>
+<h4>Experiment Selection<a class="headerlink" href="#experiment-selection" title="Permalink to this heading"></a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Please</span> <span class="n">select</span> <span class="n">which</span> <span class="n">experiment</span> <span class="n">you</span> <span class="n">would</span> <span class="n">like</span> <span class="n">to</span> <span class="n">run</span><span class="p">:</span> 
 <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="n">Visual</span> <span class="n">N170</span>
 <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Visual</span> <span class="n">P300</span>
@@ -542,7 +509,7 @@
 <p>This section allows you to select one of the above experiments to run. There are other experiments available, however, they have not yet been updated for the new API to be device agnostic. As they get updated, more experiments will populate this section.</p>
 </section>
 <section id="recording-duration">
-<h4>Recording Duration<a class="headerlink" href="#recording-duration" title="Permalink to this headline">¶</a></h4>
+<h4>Recording Duration<a class="headerlink" href="#recording-duration" title="Permalink to this heading"></a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Now</span><span class="p">,</span> <span class="n">enter</span> <span class="n">the</span> <span class="n">duration</span> <span class="n">of</span> <span class="n">the</span> <span class="n">recording</span> <span class="p">(</span><span class="ow">in</span> <span class="n">seconds</span><span class="p">)</span><span class="o">.</span> 
 
 <span class="n">Enter</span> <span class="n">duration</span><span class="p">:</span>
@@ -551,7 +518,7 @@
 <p>This is the duration of each recording. It is standard to use 120 second (2 minute) long recordings per recording, but some people might experience visual fatigue and difficulty not blinking for as long, so you are welcome to adjust length as needed.</p>
 </section>
 <section id="subject-id">
-<h4>Subject ID<a class="headerlink" href="#subject-id" title="Permalink to this headline">¶</a></h4>
+<h4>Subject ID<a class="headerlink" href="#subject-id" title="Permalink to this heading"></a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Next</span><span class="p">,</span> <span class="n">enter</span> <span class="n">the</span> <span class="n">ID</span><span class="c1"># of the subject you are recording data from. </span>
 
 <span class="n">Enter</span> <span class="n">subject</span> <span class="n">ID</span><span class="c1">#:</span>
@@ -559,7 +526,7 @@
 </div>
 </section>
 <section id="session-number">
-<h4>Session Number<a class="headerlink" href="#session-number" title="Permalink to this headline">¶</a></h4>
+<h4>Session Number<a class="headerlink" href="#session-number" title="Permalink to this heading"></a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Next</span><span class="p">,</span> <span class="n">enter</span> <span class="n">the</span> <span class="n">session</span> <span class="n">number</span> <span class="n">you</span> <span class="n">are</span> <span class="n">recording</span> <span class="k">for</span><span class="o">.</span> 
 
 <span class="n">Enter</span> <span class="n">session</span> <span class="c1">#:</span>
@@ -571,22 +538,22 @@
 </section>
 </section>
 <section id="using-jupyter-notebooks-or-a-custom-script">
-<h2>Using Jupyter Notebooks or a custom script<a class="headerlink" href="#using-jupyter-notebooks-or-a-custom-script" title="Permalink to this headline">¶</a></h2>
+<h2>Using Jupyter Notebooks or a custom script<a class="headerlink" href="#using-jupyter-notebooks-or-a-custom-script" title="Permalink to this heading"></a></h2>
 <p>The first step is to import all of the necessary library dependencies. These are necessary for generating a save file name which conforms to the default folder structure, streaming and recording EEG data, and running the stimulus presentation.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eegnb</span> <span class="kn">import</span> <span class="n">generate_save_fn</span>
 <span class="kn">from</span> <span class="nn">eegnb.devices.eeg</span> <span class="kn">import</span> <span class="n">EEG</span>
-<span class="kn">from</span> <span class="nn">eegnb.experiments.visual_n170</span> <span class="kn">import</span> <span class="n">n170</span>
+<span class="kn">from</span> <span class="nn">eegnb.experiments</span> <span class="kn">import</span> <span class="n">VisualN170</span>
 </pre></div>
 </div>
 <p>Next we need to define session parameters which are otherwise handled via input prompts in the run <code class="docutils literal notranslate"><span class="pre">run_notebooks.py</span></code> script. After we define the session parameters we will pass them to the file name generator.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">board_name</span> <span class="o">=</span> <span class="s1">&#39;cyton&#39;</span>
-<span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;visual_n170&#39;</span>
-<span class="n">session</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">subject</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">record_duration</span> <span class="o">=</span> <span class="mi">120</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">board_name</span> <span class="o">=</span> <span class="s2">&quot;muse2&quot;</span> <span class="c1"># board name</span>
+<span class="n">experiment_name</span> <span class="o">=</span> <span class="s2">&quot;visual_n170&quot;</span> <span class="c1"># experiment name</span>
+<span class="n">subject_id</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># test subject id</span>
+<span class="n">session_nb</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># session number</span>
+<span class="n">record_duration</span> <span class="o">=</span> <span class="mi">120</span> <span class="c1"># recording duration</span>
 
 <span class="c1"># Create output filename</span>
-<span class="n">save_fn</span> <span class="o">=</span> <span class="n">generate_save_fn</span><span class="p">(</span><span class="n">board_name</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+<span class="n">save_fn</span> <span class="o">=</span> <span class="n">generate_save_fn</span><span class="p">(</span><span class="n">board_name</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">,</span> <span class="n">session_nb</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Next it is necessary to call the <code class="docutils literal notranslate"><span class="pre">eegnb.devices.eeg.EEG</span></code> class which handles all of the backend processes related to each device.</p>
@@ -594,101 +561,146 @@
 </pre></div>
 </div>
 <p>Finally, we call the <code class="docutils literal notranslate"><span class="pre">present</span></code> method of the class corresponding to our desired experiment, in this case the visual N170. We pass both the EEG device and generated save file name in order to collect and save data. The presentation can also be run without an EEG device/save file for testing and debugging.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n170</span><span class="o">.</span><span class="n">present</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="n">record_duration</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="n">eeg_device</span><span class="p">,</span> <span class="n">save_fn</span><span class="o">=</span><span class="n">save_fn</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span> <span class="o">=</span> <span class="n">VisualN170</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="n">record_duration</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="n">eeg_device</span><span class="p">,</span> <span class="n">save_fn</span><span class="o">=</span><span class="n">save_fn</span><span class="p">,</span> <span class="n">use_vr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">experiment</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>All together the example script looks like</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">###################################################################################################  </span>
+<span class="c1"># Setup</span>
+<span class="c1"># ---------------------  </span>
+<span class="c1">#  </span>
+<span class="c1"># Imports</span>
 <span class="kn">from</span> <span class="nn">eegnb</span> <span class="kn">import</span> <span class="n">generate_save_fn</span>
 <span class="kn">from</span> <span class="nn">eegnb.devices.eeg</span> <span class="kn">import</span> <span class="n">EEG</span>
-<span class="kn">from</span> <span class="nn">eegnb.experiments.visual_n170</span> <span class="kn">import</span> <span class="n">n170</span>
+<span class="kn">from</span> <span class="nn">eegnb.experiments</span> <span class="kn">import</span> <span class="n">VisualN170</span>
 
 <span class="c1"># Define some variables</span>
-<span class="n">board_name</span> <span class="o">=</span> <span class="s1">&#39;cyton&#39;</span>
-<span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;visual_n170&#39;</span>
-<span class="n">session</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">subject</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">record_duration</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">board_name</span> <span class="o">=</span> <span class="s2">&quot;muse2&quot;</span> <span class="c1"># board name</span>
+<span class="n">experiment_name</span> <span class="o">=</span> <span class="s2">&quot;visual_n170&quot;</span> <span class="c1"># experiment name</span>
+<span class="n">subject_id</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># test subject id</span>
+<span class="n">session_nb</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># session number</span>
+<span class="n">record_duration</span> <span class="o">=</span> <span class="mi">120</span> <span class="c1"># recording duration</span>
 
-<span class="c1"># Create output filename</span>
-<span class="n">save_fn</span> <span class="o">=</span> <span class="n">generate_save_fn</span><span class="p">(</span><span class="n">board_name</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+<span class="c1"># generate save path</span>
+<span class="n">save_fn</span> <span class="o">=</span> <span class="n">generate_save_fn</span><span class="p">(</span><span class="n">board_name</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">,</span> <span class="n">session_nb</span><span class="p">)</span>
 
-<span class="c1"># Setup EEG device</span>
+<span class="c1"># create device object</span>
 <span class="n">eeg_device</span> <span class="o">=</span> <span class="n">EEG</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">board_name</span><span class="p">)</span>
 
-<span class="c1"># Run stimulus presentation</span>
-<span class="n">n170</span><span class="o">.</span><span class="n">present</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="n">record_duration</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="n">eeg_device</span><span class="p">,</span> <span class="n">save_fn</span><span class="o">=</span><span class="n">save_fn</span><span class="p">)</span>
+<span class="c1"># Experiment type</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">VisualN170</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="n">record_duration</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="n">eeg_device</span><span class="p">,</span> <span class="n">save_fn</span><span class="o">=</span><span class="n">save_fn</span><span class="p">,</span> <span class="n">use_vr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1">###################################################################################################  </span>
+<span class="c1"># Run experiment</span>
+<span class="c1"># ---------------------  </span>
+<span class="c1">#</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1"># Saved csv location</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recording saved in&quot;</span><span class="p">,</span> <span class="n">experiment</span><span class="o">.</span><span class="n">save_fn</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="using-virtual-reality">
+<h2>Using virtual reality<a class="headerlink" href="#using-virtual-reality" title="Permalink to this heading"></a></h2>
+<section id="heads-up-display">
+<h3>Heads up display<a class="headerlink" href="#heads-up-display" title="Permalink to this heading"></a></h3>
+<p>A heads-up display can be used for presenting experiments in a similar way to a monitor, without much modification.</p>
+<section id="features-to-be-added-in-future-releases">
+<h4>Features to be added in future releases:<a class="headerlink" href="#features-to-be-added-in-future-releases" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p>Controller input</p></li>
+<li><p>Controller haptic feedback</p></li>
+</ul>
+</section>
+</section>
+<section id="prerequisites">
+<h3>Prerequisites:<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Oculus Rift compatible VR headset, e.g. Oculus Rift or Meta Quest series.</p></li>
+<li><p>Native Windows installation with meta link compatible video card.</p></li>
+<li><p>EEG device, e.g. OpenBCI Cyton or Muse</p></li>
+</ul>
+<p>If an experiment has the use_vr argument in its present method, it can have its stimulus presented to a subject’s VR headset.
+The N170 experiment for example, can have its stimulus displayed on the VR headset with a simple modification to the ‘use_vr’ argument, when presenting an experiment:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run stimulus presentation with VR enabled.</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">VisualN170</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="n">record_duration</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="n">eeg_device</span><span class="p">,</span> <span class="n">save_fn</span><span class="o">=</span><span class="n">save_fn</span><span class="p">,</span> <span class="n">use_vr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+</section>
+<section id="steps-for-running-experiment-in-vr">
+<h3>Steps for running experiment in VR<a class="headerlink" href="#steps-for-running-experiment-in-vr" title="Permalink to this heading"></a></h3>
+<ol class="simple">
+<li><p>Launch the Oculus app on the Windows computer and the IDE or CLI to be used for running the experiment.</p></li>
+<li><p>Turn on the VR headset and put it on your head to make sure it is on and active, then take it off.</p></li>
+<li><p>Go to the ‘Devices’ view in the Oculus app, it will show the headset as connected and active, along with any inactive or connected controllers.</p></li>
+<li><p>Go to the ‘Settings’ view, under the ‘Beta’ title, enable ‘Pass through over Oculus Link’, double tapping the headset later with a fingertip will activate passthrough.</p></li>
+<li><p>Put the VR headset onto the head, activate passthrough to help with wearing the eeg device.</p></li>
+<li><p>Place the EEG device on top of the head.</p></li>
+<li><p>Ensure the electrodes are touching the scalp ok and not being blocked by the headset strap.</p></li>
+<li><p>From inside the VR headset’s ‘quick settings’ dashboard, select ‘Quest Link’ and connect to the Oculus server running on windows, via air link or link cable.</p></li>
+<li><p>Once the Oculus menu has finished loading on the VR headset, open the built-in Oculus desktop app by using the touch controllers or gamepad.</p></li>
+<li><p>Try opening an eeg device raw data viwer and verify that the electrodes are receiving a good signal without too much noise, eg ‘OpenBCI GUI’.</p></li>
+<li><p>Run the EEG-ExPy experiment from the command line or IDE, it should load and take control from the Oculus desktop app.</p></li>
+<li><p>Follow the experiment instructions, and press a key if necessary to begin the experiment and collect valid data.</p></li>
+</ol>
+</section>
+<section id="other-experiments-can-have-vr-added-too">
+<h3>Other experiments can have VR added too.<a class="headerlink" href="#other-experiments-can-have-vr-added-too" title="Permalink to this heading"></a></h3>
+<ol class="simple">
+<li><p>Load/prepare stimulus in the same function as previously (def load_stimulus(self))</p></li>
+<li><p>Present stimulus in the same function as previously(def present_stimulus(self, current_trial: int))</p></li>
+<li><p>VR can be enabled for the experiment as part of the initializer to the base Experiment class, by default it is not enabled(use_vr=False) and will function the same as previously before VR functionality was added.</p></li>
+</ol>
+</section>
 </section>
 </section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="data_zipper.html" class="btn btn-neutral float-right" title="Data Zipping" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="streaming.html" class="btn btn-neutral float-left" title="Initiating an EEG Stream" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="streaming.html" class="btn btn-neutral float-left" title="Initiating an EEG Stream" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_zipper.html" class="btn btn-neutral float-right" title="Data Zipping" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright John Griffiths, Jadin Tredup, NeuroTechX, &amp; Contributors
-
-    </p>
+    <p>&#169; Copyright John Griffiths, Jadin Tredup, NeuroTechX, &amp; Contributors.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-  
-  
-    
     <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
     <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    ga('create', 'UA-XXXXXXX-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-
-    
-   
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
 
 </body>
 </html>
