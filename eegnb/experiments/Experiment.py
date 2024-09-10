@@ -11,6 +11,7 @@ obj.run()
 from abc import abstractmethod
 from typing import Callable
 from psychopy import prefs
+from psychopy.visual.rift import Rift
 #change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
 prefs.hardware['audioLatencyMode'] = 3
@@ -50,6 +51,9 @@ class BaseExperiment:
         self.soa = soa
         self.jitter = jitter
         self.use_vr = use_vr
+        if use_vr:
+            self.rift: Rift = visual.Rift(monoscopic=True, headLocked=True)
+            self.all_vr_controllers = ['Xbox', 'LeftTouch', 'RightTouch']
 
     @abstractmethod
     def load_stimulus(self):
@@ -85,7 +89,7 @@ class BaseExperiment:
         # Setting up Graphics 
         self.window = (
             visual.Rift(monoscopic=True, headLocked=True) if self.use_vr
-            else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=True))
+            else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=False))
         
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
@@ -121,14 +125,60 @@ class BaseExperiment:
         # Disabling the cursor during display of instructions
         self.window.mouseVisible = False
 
-        # Waiting for the user to press the spacebar to start the experiment
-        while len(event.getKeys(keyList="space")) == 0:
+        # clear/reset any old key/controller events
+        self.__clear_user_input()
+
+        # Waiting for the user to press the spacebar or controller button or trigger to start the experiment
+        while not self.__user_input('start'):
             # Displaying the instructions on the screen
             text = visual.TextStim(win=self.window, text=self.instruction_text, color=[-1, -1, -1])
             self.__draw(lambda: self.__draw_instructions(text))
 
             # Enabling the cursor again
             self.window.mouseVisible = True
+
+    def __user_input(self, input_type):
+        if input_type is 'start':
+            key_list = 'spacebar'
+            if self.use_vr:
+                vr_buttons = ['A', 'X']
+                vr_trigger_thresh = 0.0
+        elif input_type is 'cancel':
+            key_list = 'escape'
+            if self.use_vr:
+                vr_buttons = ['B', 'Y']
+
+        if len(event.getKeys(keyList=key_list)) > 0:
+            return True
+        if self.use_vr:
+            for vr_controller in self.all_vr_controllers:
+                if self.get_vr_input(vr_controller, vr_buttons, vr_trigger_thresh):
+                    return True
+        return False
+
+    def get_vr_input(self, vr_controller, buttons, trigger_thresh):
+        """
+        Method that returns True if the user presses the corresponding vr controller input
+        Args:
+            vr_controller: 'Xbox', 'LeftTouch' or 'RightTouch'
+            buttons: None, 'A', 'B', 'X' or 'Y'
+            trigger_thresh: From 0.0 to 1.0.
+
+        Returns:
+
+        """
+        triggered = False
+        if trigger_thresh:
+            for x in self.rift.getIndexTriggerValues(vr_controller):
+                if x > trigger_thresh:
+                    triggered = True
+
+        button_pressed, tsec = self.rift.getButtons(buttons, vr_controller, 'released')
+
+        if triggered or button_pressed:
+            return True
+
+        return False
 
     def __draw_instructions(self, text):
         text.draw()
@@ -144,6 +194,17 @@ class BaseExperiment:
             self.window.calcEyePoses(tracking_state.headPose.thePose)
             self.window.setDefaultView()
         present_stimulus()
+
+    def __clear_user_input(self):
+        event.getKeys()
+        self.clear_vr_input()
+
+    def clear_vr_input(self):
+        """
+        Clears/resets input events from vr controllers
+        """
+        if self.use_vr:
+            self.rift.updateInputState()
 
     def run(self, instructions=True):
         """ Do the present operation for a bunch of experiments """
@@ -169,7 +230,11 @@ class BaseExperiment:
 
         # Current trial being rendered
         rendering_trial = -1
-        while len(event.getKeys()) == 0 and (time() - start) < self.record_duration:
+
+        # Clear/reset user input buffer
+        self.__clear_user_input()
+
+        while not self.__user_input('cancel') and (time() - start) < self.record_duration:
 
             current_experiment_seconds = time() - start
             # Do not present stimulus until current trial begins(Adhere to inter-trial interval).
