@@ -55,10 +55,8 @@ class BaseExperiment:
         self.jitter = jitter
         self.use_vr = use_vr
         if use_vr:
+            # VR interface accessible by specific experiment classes for customizing and using controllers.
             self.rift: Rift = visual.Rift(monoscopic=True, headLocked=True)
-            #NOTE: doesnt work for combining both right and left for some reason? need to specify right.
-            #self.vr_controller = 'Touch'
-            self.vr_controller = 'RightTouch'
         self.use_fixation = use_fixation
 
     @abstractmethod
@@ -71,7 +69,7 @@ class BaseExperiment:
         raise NotImplementedError
 
     @abstractmethod
-    def present_stimulus(self, idx: int):
+    def present_stimulus(self, idx : int):
         """
         Method that presents the stimulus for the specific experiment, overwritten by the specific experiment
         Displays the stimulus on the screen
@@ -87,7 +85,7 @@ class BaseExperiment:
         # Initializing the record duration and the marker names
         self.record_duration = np.float32(self.duration)
         self.markernames = [1, 2]
-
+        
         # Setting up the trial and parameter list
         self.parameter = np.random.binomial(1, 0.5, self.n_trials)
         self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
@@ -96,7 +94,7 @@ class BaseExperiment:
         self.window = (
             self.rift if self.use_vr
             else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=True))
-
+        
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
 
@@ -111,10 +109,10 @@ class BaseExperiment:
 
         # Checking for EEG to setup the EEG stream
         if self.eeg:
-            # If no save_fn passed, generate a new unnamed save file
-            if self.save_fn is None:
+             # If no save_fn passed, generate a new unnamed save file
+            if self.save_fn is None:  
                 # Generating a random int for the filename
-                random_id = random.randint(1000, 10000)
+                random_id = random.randint(1000,10000)
                 # Generating save function
                 experiment_directory = self.name.replace(' ', '_')
                 self.save_fn = generate_save_fn(self.eeg.device_name, experiment_directory, random_id, random_id, "unnamed")
@@ -122,7 +120,7 @@ class BaseExperiment:
                 print(
                     f"No path for a save file was passed to the experiment. Saving data to {self.save_fn}"
                 )
-
+    
     def show_instructions(self):
         """ 
         Method that shows the instructions for the specific Experiment
@@ -136,11 +134,11 @@ class BaseExperiment:
         # Disabling the cursor during display of instructions
         self.window.mouseVisible = False
 
-        # clear any key/controller events
-        self.clear_user_input()
+        # clear/reset any old key/controller events
+        self.__clear_user_input()
 
-        # Waiting for the user to press the spacebar or controller to start the experiment
-        while not self.user_input(key_list="space"):
+        # Waiting for the user to press the spacebar or controller button or trigger to start the experiment
+        while not self.__user_input('start'):
             # Displaying the instructions on the screen
             text = visual.TextStim(win=self.window, text=self.instruction_text, color=[-1, -1, -1])
             self.__draw(lambda: self.__draw_instructions(text))
@@ -148,21 +146,55 @@ class BaseExperiment:
             # Enabling the cursor again
             self.window.mouseVisible = True
 
-    def user_input(self, key_list=None):
-        if len(event.getKeys(keyList=key_list)) > 0:
+    def __user_input(self, input_type):
+        if input_type == 'start':
+            key_input = 'spacebar'
+            vr_inputs = [
+                ('RightTouch', 'A', True),
+                ('LeftTouch', 'X', True),
+                ('Xbox', 'A', None)
+            ]
+
+        elif input_type == 'cancel':
+            key_input = 'escape'
+            vr_inputs = [
+                ('RightTouch', 'B', False),
+                ('LeftTouch', 'Y', False),
+                ('Xbox', 'B', None)
+            ]
+
+        if len(event.getKeys(keyList=key_input)) > 0:
             return True
+
         if self.use_vr:
-            return self.get_vr_input(['A', 'B'])
+            for controller, button, trigger in vr_inputs:
+                if self.get_vr_input(controller, button, trigger):
+                    return True
+
         return False
 
-    def get_vr_input(self, buttons):
-        trigger = False
-        for x in self.rift.getIndexTriggerValues(self.vr_controller):
-            if x > 0:
-                trigger = True
+    def get_vr_input(self, vr_controller, button=None, trigger=False):
+        """
+        Method that returns True if the user presses the corresponding vr controller button or trigger
+        Args:
+            vr_controller: 'Xbox', 'LeftTouch' or 'RightTouch'
+            button: None, 'A', 'B', 'X' or 'Y'
+            trigger (bool): Set to True for trigger 
 
-        button_pressed, tsec = self.rift.getButtons(buttons, self.vr_controller, 'released')
-        if trigger or button_pressed:
+        Returns:
+
+        """
+        trigger_squeezed = False
+        if trigger:
+            for x in self.rift.getIndexTriggerValues(vr_controller):
+                if x > 0.0:
+                    trigger_squeezed = True
+
+        button_pressed = False
+        if button is not None:
+            button_pressed, tsec = self.rift.getButtons([button], vr_controller, 'released')
+
+        if trigger_squeezed or button_pressed:
             return True
 
         return False
@@ -182,8 +214,14 @@ class BaseExperiment:
             self.window.setDefaultView()
         present_stimulus()
 
-    def clear_user_input(self):
+    def __clear_user_input(self):
         event.getKeys()
+        self.clear_vr_input()
+
+    def clear_vr_input(self):
+        """
+        Clears/resets input events from vr controllers
+        """
         if self.use_vr:
             self.rift.updateInputState()
 
@@ -212,10 +250,10 @@ class BaseExperiment:
         # Current trial being rendered
         rendering_trial = -1
 
-        # Clear user input buffer
-        self.clear_user_input()
+        # Clear/reset user input buffer
+        self.__clear_user_input()
 
-        while not self.user_input() and (time() - start) < self.record_duration:
+        while not self.__user_input('cancel') and (time() - start) < self.record_duration:
 
             current_experiment_seconds = time() - start
             # Do not present stimulus until current trial begins(Adhere to inter-trial interval).
@@ -231,7 +269,7 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    self.__draw(lambda: self.present_stimulus(current_trial))
+                    self.__draw(lambda: self.present_stimulus(current_trial, current_trial))
                     rendering_trial = current_trial
 
                     if self.use_fixation:
