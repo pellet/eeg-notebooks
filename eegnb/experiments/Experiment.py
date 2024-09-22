@@ -13,7 +13,7 @@ from typing import Callable
 from psychopy import prefs
 from psychopy.tools.rifttools import LibOVRHapticsBuffer
 from psychopy.visual.rift import Rift
-from psychxr.drivers.libovr import getHapticsInfo
+# from psychxr.drivers.libovr import getHapticsInfo
 
 # change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
@@ -291,19 +291,19 @@ class BaseExperiment:
         # Closing the window
         self.window.close()
 
-#todo: use higher level rift interface instead
-    def vibrate(self, controller: int, buffer: LibOVRHapticsBuffer):
+    # TODO: Use psychopy/rift interface instead if exists.
+    # def vibrate(self, controller: int, buffer: LibOVRHapticsBuffer):
         # check if controller exists
-        hap = getHapticsInfo()
-        if hap is None:
-            hap = hap
-
-        # vibrate right Touch controller
-        haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
-
-        # check haptic info
-        if haptic_info is None:
-            haptic_info = haptic_info
+        # hap = getHapticsInfo()
+        # if hap is None:
+        #     hap = hap
+        #
+        # # vibrate right Touch controller
+        # haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
+        #
+        # # check haptic info
+        # if haptic_info is None:
+        #     haptic_info = haptic_info
 
     @property
     def name(self) -> str:
