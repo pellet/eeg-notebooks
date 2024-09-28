@@ -93,7 +93,7 @@ class BaseExperiment:
         # Setting up Graphics 
         self.window = (
             self.rift if self.use_vr
-            else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=True))
+            else visual.Window([1920, 1080], monitor="testMonitor", units="deg", fullscr=False))
         
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()

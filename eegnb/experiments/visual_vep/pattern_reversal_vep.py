@@ -8,12 +8,13 @@ from typing import Optional
 from eegnb.devices.eeg import EEG
 from eegnb.experiments import Experiment
 from eegnb.stimuli import PATTERN_REVERSAL
+from stimupy.stimuli.checkerboards import contrast_contrast
 
 
 class VisualPatternReversalVEP(Experiment.BaseExperiment):
 
     def __init__(self, duration=120, eeg: Optional[EEG] = None, save_fn=None,
-                 n_trials=2000, iti=0, soa=0.5, jitter=0, use_vr=False):
+                 n_trials=2000, iti=0, soa=0.5, jitter=0, use_vr=False, size=None):
 
         exp_name = "Visual Pattern Reversal VEP"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
@@ -24,15 +25,35 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         # next make an outlet
         self.outlet = StreamOutlet(info)
 
+        if size is None:
+            self.size = [2, 2] if self.use_vr else self.window.size
+        else:
+            self.size = size
+
+    @staticmethod
+    def create_checkerboard(intensity_checks):
+        return contrast_contrast(
+            visual_size=(10, 10),  # size in degrees
+            ppd=30,  # pixels per degree
+            frequency=(1,1),  # spatial frequency of the checkerboard
+            intensity_checks=intensity_checks,
+            target_shape=(1, 1),
+            alpha=0,
+            tau=0,
+        )
+
     def load_stimulus(self):
         # 
         self.markernames = [1, 2]
 
-        load_image = lambda fn: visual.ImageStim(win=self.window, image=fn,
-                                                 size=[2, 2] if self.use_vr else [40, 30])
-        self.checkerboard = list(map(load_image, glob(os.path.join(PATTERN_REVERSAL, "checker*.jpeg"))))
+        contrast_checkerboard = self.create_checkerboard((1, -1))
+        contrast_checkerboard_2 = self.create_checkerboard((-1, 1))
 
-        self.fixation = visual.GratingStim(win=self.window, size=0.2, pos=[0, 0], sf=0, rgb=[1, 0, 0])
+        # Create PsychoPy stimuli
+        stim1 = visual.ImageStim(self.window, image=contrast_checkerboard['img'], units='pix', size=self.size, color='white')
+        stim2 = visual.ImageStim(self.window, image=contrast_checkerboard_2['img'], units='pix', size=self.size, color='white')
+
+        self.checkerboard = [stim1, stim2]
 
     def present_stimulus(self, idx: int):
         # onset
