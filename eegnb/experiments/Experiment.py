@@ -72,7 +72,7 @@ class BaseExperiment:
         raise NotImplementedError
 
     @abstractmethod
-    def present_stimulus(self, idx : int):
+    def present_stimulus(self, idx: int, trial: Any, stimuli: List[Any]):
         """
         Method that presents the stimulus for the specific experiment, overwritten by the specific experiment
         Displays the stimulus on the screen
@@ -80,6 +80,8 @@ class BaseExperiment:
         Throws error if not overwritten in the specific experiment
 
         idx : Trial index for the current trial
+        trial : Current trial parameter, timestamp
+        stimuli : Stimulus object in the form of [{stim1},{stim2},...]
         """
         raise NotImplementedError
 
@@ -252,6 +254,9 @@ class BaseExperiment:
         # Current trial being rendered
         rendering_trial = -1
 
+        # Iterate through the events
+        iterate_events = self.trials.iterrows()
+
         # Clear/reset user input buffer
         self.__clear_user_input()
 
@@ -271,7 +276,8 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    self.__draw(lambda: self.present_stimulus(current_trial))
+                    ii, trial = next(iterate_events)
+                    self.__draw(lambda: self.present_stimulus_callable(ii, trial, self.stim))
                     rendering_trial = current_trial
 
                     if self.fixation:
