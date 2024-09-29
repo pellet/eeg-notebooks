@@ -7,16 +7,10 @@ Running each experiment:
 obj = VisualP300({parameters})
 obj.run()
 """
-
+import inspect
 from abc import abstractmethod
-from typing import Callable, Union
+from typing import Callable, Union, List, Any
 from psychopy import prefs
-from psychopy.visual import Window
-from psychopy.visual.rift import Rift
-from psychopy.visual.grating import GratingStim
-
-# from psychxr.drivers.libovr import getHapticsInfo
-
 # change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
 prefs.hardware['audioLatencyMode'] = 3
@@ -33,9 +27,7 @@ from eegnb import generate_save_fn
 
 class BaseExperiment:
 
-    def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float,
-                 use_vr=False, window: Union[Window, Rift] = None,
-                 fixation: GratingStim = None):
+    def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float, use_vr=False, window: Union[visual.Window, visual.Rift] = None):
         """ Initializer for the Base Experiment Class
 
         Args:
@@ -45,7 +37,6 @@ class BaseExperiment:
             jitter (float): Random delay between stimulus
             use_vr (bool): Use VR for displaying stimulus
             window (Window or Rift): Window and VR interface for display customization and vr controllers
-            fixation (GratingStim): Fixation stimulus to display during the experiment
         """
 
         self.exp_name = exp_name
@@ -60,7 +51,15 @@ class BaseExperiment:
         self.jitter = jitter
         self.use_vr = use_vr
         self.window = window
-        self.fixation = fixation
+
+        method_name = 'present_stimulus'
+        if hasattr(self, method_name) and callable(getattr(self, method_name)):
+            method = getattr(self, method_name)
+            signature = inspect.signature(method)
+            if len(signature.parameters) > 2:
+                self.present_stimulus_callable = lambda idx, trial, stimuli: self.present_stimulus(idx, trial, stimuli)
+            else:
+                self.present_stimulus_callable = lambda idx, trial, stimuli: self.present_stimulus(idx, trial)
 
     @abstractmethod
     def load_stimulus(self):
@@ -99,7 +98,7 @@ class BaseExperiment:
         if self.window is None:
             self.window = (
                 visual.Rift(monoscopic=True, headLocked=True) if self.use_vr
-                else visual.Window([1920, 1080], monitor="testMonitor", units="deg", fullscr=False))
+                else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=True))
 
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
@@ -279,14 +278,7 @@ class BaseExperiment:
                     ii, trial = next(iterate_events)
                     self.__draw(lambda: self.present_stimulus_callable(ii, trial, self.stim))
                     rendering_trial = current_trial
-
-                    if self.fixation:
-                        self.fixation.draw()
-                        self.window.flip()
-
             else:
-                if self.fixation:
-                    self.fixation.draw()
                 self.__draw(lambda: self.window.flip())
 
         # Clearing the screen for the next trial
@@ -298,20 +290,6 @@ class BaseExperiment:
 
         # Closing the window
         self.window.close()
-
-    # TODO: Use psychopy/rift interface instead if exists.
-    # def vibrate(self, controller: int, buffer: LibOVRHapticsBuffer):
-        # check if controller exists
-        # hap = getHapticsInfo()
-        # if hap is None:
-        #     hap = hap
-        #
-        # # vibrate right Touch controller
-        # haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
-        #
-        # # check haptic info
-        # if haptic_info is None:
-        #     haptic_info = haptic_info
 
     @property
     def name(self) -> str:

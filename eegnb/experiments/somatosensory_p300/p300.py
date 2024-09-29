@@ -13,6 +13,7 @@ from pandas import DataFrame
 from psychopy import visual, core, event
 from psychopy.tools.rifttools import LibOVRHapticsBuffer
 from psychxr.drivers.libovr import CONTROLLER_TYPE_RTOUCH, CONTROLLER_TYPE_LTOUCH, HAPTICS_BUFFER_SAMPLES_MAX
+from psychxr.drivers.libovr import getHapticsInfo
 
 from eegnb.stimuli import CAT_DOG
 from eegnb.experiments import Experiment
@@ -55,3 +56,16 @@ class SomatosensoryP300(Experiment.BaseExperiment):
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
 
         self.window.flip()
+
+    def vibrate(self, controller: int, buffer: LibOVRHapticsBuffer):
+        # check if controller exists
+        hap = getHapticsInfo()
+        if hap is None:
+            hap = hap
+
+        # vibrate right Touch controller
+        haptic_info = LibOVRHapticsBuffer.submitControllerVibration(controller, buffer)
+
+        # check haptic info
+        if haptic_info is None:
+            haptic_info = haptic_info

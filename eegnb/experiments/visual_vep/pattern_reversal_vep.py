@@ -1,8 +1,7 @@
 ﻿from time import time
 
 from psychopy import visual
-from pylsl import StreamInfo, StreamOutlet
-from typing import Optional
+from typing import Optional, Any, List
 from eegnb.devices.eeg import EEG
 from eegnb.experiments import Experiment
 from stimupy.stimuli.checkerboards import contrast_contrast
@@ -16,7 +15,6 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         exp_name = "Visual Pattern Reversal VEP"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
 
-        #
         self.marker_names = [1, 2]
 
         if size is None:
@@ -37,22 +35,18 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         )
 
     def load_stimulus(self):
-
-        contrast_checkerboard = self.create_checkerboard((1, -1))
-        contrast_checkerboard_2 = self.create_checkerboard((-1, 1))
-
-        # Create PsychoPy stimuli
-        stim1 = visual.ImageStim(self.window, image=contrast_checkerboard['img'], units='pix',
+        # Create checkerboard and checkerboard inverse stimuli
+        stim1 = visual.ImageStim(self.window, image=self.create_checkerboard((1, -1))['img'], units='pix',
                                  size=self.size, color='white')
-        stim2 = visual.ImageStim(self.window, image=contrast_checkerboard_2['img'], units='pix',
+        stim2 = visual.ImageStim(self.window, image=self.create_checkerboard((-1, 1))['img'], units='pix',
                                  size=self.size, color='white')
 
-        self.checkerboard = [stim1, stim2]
+        return [stim1, stim2]
 
-    def present_stimulus(self, idx: int):
+    def present_stimulus(self, idx: int, trial: Any, stimuli: List[Any]):
         # onset
         checkerboard_frame = idx % 2
-        image = self.checkerboard[checkerboard_frame]
+        image = stimuli[checkerboard_frame]
         image.draw()
         self.window.flip()
 
