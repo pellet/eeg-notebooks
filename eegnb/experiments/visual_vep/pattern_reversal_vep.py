@@ -18,7 +18,7 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         self.marker_names = [1, 2]
 
         if size is None:
-            self.size = [2, 2] if self.use_vr else [1600, 900]
+            self.size = [1700, 1700] if use_vr else [1600, 900]
         else:
             self.size = size
 

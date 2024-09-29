@@ -21,13 +21,14 @@ import random
 import numpy as np
 from pandas import DataFrame
 from psychopy import visual, event
+from psychopy.visual import rift
 
 from eegnb import generate_save_fn
 
 
 class BaseExperiment:
 
-    def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float, use_vr=False, window: Union[visual.Window, visual.Rift] = None):
+    def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float, use_vr=False, window: Union[visual.Window, rift.Rift] = None):
         """ Initializer for the Base Experiment Class
 
         Args:
