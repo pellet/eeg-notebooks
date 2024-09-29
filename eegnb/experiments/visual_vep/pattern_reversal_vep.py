@@ -1,13 +1,10 @@
-﻿import os
-from glob import glob
-from time import time
+﻿from time import time
 
 from psychopy import visual
 from pylsl import StreamInfo, StreamOutlet
 from typing import Optional
 from eegnb.devices.eeg import EEG
 from eegnb.experiments import Experiment
-from eegnb.stimuli import PATTERN_REVERSAL
 from stimupy.stimuli.checkerboards import contrast_contrast
 
 
@@ -19,11 +16,8 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         exp_name = "Visual Pattern Reversal VEP"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
 
-        # create
-        info = StreamInfo("Markers", "Markers", 1, 0, "int32", "myuidw43536")
-
-        # next make an outlet
-        self.outlet = StreamOutlet(info)
+        #
+        self.marker_names = [1, 2]
 
         if size is None:
             self.size = [2, 2] if self.use_vr else self.window.size
@@ -35,7 +29,7 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         return contrast_contrast(
             visual_size=(10, 10),  # size in degrees
             ppd=30,  # pixels per degree
-            frequency=(1,1),  # spatial frequency of the checkerboard
+            frequency=(1, 1),  # spatial frequency of the checkerboard
             intensity_checks=intensity_checks,
             target_shape=(1, 1),
             alpha=0,
@@ -43,15 +37,15 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         )
 
     def load_stimulus(self):
-        # 
-        self.markernames = [1, 2]
 
         contrast_checkerboard = self.create_checkerboard((1, -1))
         contrast_checkerboard_2 = self.create_checkerboard((-1, 1))
 
         # Create PsychoPy stimuli
-        stim1 = visual.ImageStim(self.window, image=contrast_checkerboard['img'], units='pix', size=self.size, color='white')
-        stim2 = visual.ImageStim(self.window, image=contrast_checkerboard_2['img'], units='pix', size=self.size, color='white')
+        stim1 = visual.ImageStim(self.window, image=contrast_checkerboard['img'], units='pix',
+                                 size=self.size, color='white')
+        stim2 = visual.ImageStim(self.window, image=contrast_checkerboard_2['img'], units='pix',
+                                 size=self.size, color='white')
 
         self.checkerboard = [stim1, stim2]
 
@@ -62,12 +56,10 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         image.draw()
         self.window.flip()
 
-        self.outlet.push_sample([self.markernames[checkerboard_frame]], time())
-
         # Pushing the sample to the EEG
         if self.eeg:
             if self.eeg.backend == "muselsl":
-                marker = [self.markernames[checkerboard_frame]]
+                marker = [self.marker_names[checkerboard_frame]]
             else:
-                marker = self.markernames[checkerboard_frame]
+                marker = self.marker_names[checkerboard_frame]
             self.eeg.push_sample(marker=marker, timestamp=time())

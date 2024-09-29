@@ -9,10 +9,12 @@ obj.run()
 """
 
 from abc import abstractmethod
-from typing import Callable
+from typing import Callable, Union
 from psychopy import prefs
-from psychopy.tools.rifttools import LibOVRHapticsBuffer
+from psychopy.visual import Window
 from psychopy.visual.rift import Rift
+from psychopy.visual.grating import GratingStim
+
 # from psychxr.drivers.libovr import getHapticsInfo
 
 # change the pref libraty to PTB and set the latency mode to high precision
@@ -32,7 +34,8 @@ from eegnb import generate_save_fn
 class BaseExperiment:
 
     def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float,
-                 use_vr=False, use_fixation=False):
+                 use_vr=False, window: Union[Window, Rift] = None,
+                 fixation: GratingStim = None):
         """ Initializer for the Base Experiment Class
 
         Args:
@@ -41,6 +44,8 @@ class BaseExperiment:
             soa (float): Stimulus on arrival
             jitter (float): Random delay between stimulus
             use_vr (bool): Use VR for displaying stimulus
+            window (Window or Rift): Window and VR interface for display customization and vr controllers
+            fixation (GratingStim): Fixation stimulus to display during the experiment
         """
 
         self.exp_name = exp_name
@@ -54,10 +59,8 @@ class BaseExperiment:
         self.soa = soa
         self.jitter = jitter
         self.use_vr = use_vr
-        if use_vr:
-            # VR interface accessible by specific experiment classes for customizing and using controllers.
-            self.rift: Rift = visual.Rift(monoscopic=True, headLocked=True)
-        self.use_fixation = use_fixation
+        self.window = window
+        self.fixation = fixation
 
     @abstractmethod
     def load_stimulus(self):
@@ -90,18 +93,14 @@ class BaseExperiment:
         self.parameter = np.random.binomial(1, 0.5, self.n_trials)
         self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
 
-        # Setting up Graphics 
-        self.window = (
-            self.rift if self.use_vr
-            else visual.Window([1920, 1080], monitor="testMonitor", units="deg", fullscr=False))
-        
+        # Setting up Graphics
+        if self.window is None:
+            self.window = (
+                visual.Rift(monoscopic=True, headLocked=True) if self.use_vr
+                else visual.Window([1920, 1080], monitor="testMonitor", units="deg", fullscr=False))
+
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
-
-        if self.use_fixation:
-            grating_sf = 400 if self.use_vr else 0.2
-            self.fixation = visual.GratingStim(win=self.window, pos=[0, 0], sf=grating_sf, rgb=[1, 0, 0])
-            self.fixation.size = 0.02 if self.use_vr else 0.2
 
         # Show Instruction Screen if not skipped by the user
         if instructions:
@@ -163,6 +162,9 @@ class BaseExperiment:
                 ('Xbox', 'B', None)
             ]
 
+        else:
+            raise Exception(f'Invalid input_type: {input_type}')
+
         if len(event.getKeys(keyList=key_input)) > 0:
             return True
 
@@ -186,13 +188,13 @@ class BaseExperiment:
         """
         trigger_squeezed = False
         if trigger:
-            for x in self.rift.getIndexTriggerValues(vr_controller):
+            for x in self.window.getIndexTriggerValues(vr_controller):
                 if x > 0.0:
                     trigger_squeezed = True
 
         button_pressed = False
         if button is not None:
-            button_pressed, tsec = self.rift.getButtons([button], vr_controller, 'released')
+            button_pressed, tsec = self.window.getButtons([button], vr_controller, 'released')
 
         if trigger_squeezed or button_pressed:
             return True
@@ -223,7 +225,7 @@ class BaseExperiment:
         Clears/resets input events from vr controllers
         """
         if self.use_vr:
-            self.rift.updateInputState()
+            self.window.updateInputState()
 
     def run(self, instructions=True):
         """ Do the present operation for a bunch of experiments """
@@ -272,12 +274,12 @@ class BaseExperiment:
                     self.__draw(lambda: self.present_stimulus(current_trial))
                     rendering_trial = current_trial
 
-                    if self.use_fixation:
+                    if self.fixation:
                         self.fixation.draw()
                         self.window.flip()
 
             else:
-                if self.use_fixation:
+                if self.fixation:
                     self.fixation.draw()
                 self.__draw(lambda: self.window.flip())
 

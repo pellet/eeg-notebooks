@@ -17,17 +17,21 @@ from typing import Optional
 
 class VisualSSVEP(Experiment.BaseExperiment):
 
-    def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.5, soa = 3.0, jitter = 0.2, use_vr=False):
+    def __init__(self, duration=120, eeg: Optional[EEG]=None, save_fn=None, n_trials = 2010, iti = 0.5, soa = 3.0, jitter = 0.2, use_vr=False, window=None):
         
         self.use_vr = use_vr
         exp_name = "Visual SSVEP"
-        super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr, use_fixation=True)
+
+        super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr, window)
 
     def load_stimulus(self):
 
         grating_sf = 400 if self.use_vr else 0.2
         self.grating = visual.GratingStim(win=self.window, mask="circle", size=80, sf=grating_sf)
         self.grating_neg = visual.GratingStim(win=self.window, mask="circle", size=80, sf=grating_sf, phase=0.5)
+
+        self.fixation = visual.GratingStim(win=self.window, pos=[0, 0], sf=grating_sf, color=[1, 0, 0])
+        self.fixation.size = 0.02 if self.use_vr else 0.2
 
         # Generate the possible ssvep frequencies based on monitor refresh rate
         def get_possible_ssvep_freqs(frame_rate, stim_type="single"):
@@ -70,8 +74,8 @@ class VisualSSVEP(Experiment.BaseExperiment):
         frame_rate = np.round(self.window.displayRefreshRate if self.use_vr else self.window.getActualFrameRate())
         freqs = get_possible_ssvep_freqs(frame_rate, stim_type="reversal")
         self.stim_patterns = [
-            init_flicker_stim(frame_rate, 2, self.soa),
-            init_flicker_stim(frame_rate, 3, self.soa),
+        init_flicker_stim(frame_rate, 2, self.soa),
+        init_flicker_stim(frame_rate, 3, self.soa),
         ]
         
         print(
@@ -88,7 +92,7 @@ class VisualSSVEP(Experiment.BaseExperiment):
             init_flicker_stim(frame_rate, 3, self.soa),
         ]
 
-    def present_stimulus(self, idx):
+    def present_stimulus(self, idx, trial):
 
         # Select stimulus frequency
         ind = self.trials["parameter"].iloc[idx]
