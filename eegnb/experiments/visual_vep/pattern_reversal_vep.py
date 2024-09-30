@@ -37,7 +37,7 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
     @staticmethod
     def create_vr_checkerboard(intensity_checks):
         return contrast_contrast(
-            visual_size=(15, 15),  # size in degrees
+            visual_size=(20, 20),  # size in degrees
             ppd=30,  # pixels per degree
             frequency=(1, 1),  # spatial frequency of the checkerboard
             intensity_checks=intensity_checks,
