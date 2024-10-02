@@ -9,7 +9,7 @@ obj.run()
 """
 
 from abc import abstractmethod
-from typing import Callable
+from typing import Callable, Any
 from psychopy import prefs
 from psychopy.visual.rift import Rift
 #change the pref libraty to PTB and set the latency mode to high precision
@@ -65,7 +65,7 @@ class BaseExperiment:
         raise NotImplementedError
 
     @abstractmethod
-    def present_stimulus(self, idx : int):
+    def present_stimulus(self, idx: int, trial: Any):
         """
         Method that presents the stimulus for the specific experiment, overwritten by the specific experiment
         Displays the stimulus on the screen
@@ -73,6 +73,7 @@ class BaseExperiment:
         Throws error if not overwritten in the specific experiment
 
         idx : Trial index for the current trial
+        trial : Current trial(parameter, timestamp)
         """
         raise NotImplementedError
 
@@ -170,7 +171,7 @@ class BaseExperiment:
         Args:
             vr_controller: 'Xbox', 'LeftTouch' or 'RightTouch'
             button: None, 'A', 'B', 'X' or 'Y'
-            trigger (bool): Set to True for trigger 
+            trigger (bool): Set to True for trigger
 
         Returns:
 
@@ -241,6 +242,9 @@ class BaseExperiment:
         # Current trial being rendered
         rendering_trial = -1
 
+        # Iterate through the events
+        iterate_events = self.trials.iterrows()
+
         # Clear/reset user input buffer
         self.__clear_user_input()
 
@@ -260,7 +264,8 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    self.__draw(lambda: self.present_stimulus(current_trial, current_trial))
+                    ii, trial = next(iterate_events)
+                    self.__draw(lambda: self.present_stimulus(ii, trial))
                     rendering_trial = current_trial
             else:
                 self.__draw(lambda: self.window.flip())
