@@ -7,7 +7,7 @@ Running each experiment:
 obj = VisualP300({parameters})
 obj.run()
 """
-import inspect
+
 from abc import abstractmethod
 from typing import Callable, Union, List, Any
 from psychopy import prefs
@@ -53,15 +53,6 @@ class BaseExperiment:
         self.use_vr = use_vr
         self.window = window
 
-        method_name = 'present_stimulus'
-        if hasattr(self, method_name) and callable(getattr(self, method_name)):
-            method = getattr(self, method_name)
-            signature = inspect.signature(method)
-            if len(signature.parameters) > 2:
-                self.present_stimulus_callable = lambda idx, trial, stimuli: self.present_stimulus(idx, trial, stimuli)
-            else:
-                self.present_stimulus_callable = lambda idx, trial, stimuli: self.present_stimulus(idx, trial)
-
     @abstractmethod
     def load_stimulus(self):
         """ 
@@ -72,7 +63,7 @@ class BaseExperiment:
         raise NotImplementedError
 
     @abstractmethod
-    def present_stimulus(self, idx: int, trial: Any, stimuli: List[Any]):
+    def present_stimulus(self, idx : int):
         """
         Method that presents the stimulus for the specific experiment, overwritten by the specific experiment
         Displays the stimulus on the screen
@@ -80,8 +71,6 @@ class BaseExperiment:
         Throws error if not overwritten in the specific experiment
 
         idx : Trial index for the current trial
-        trial : Current trial parameter, timestamp
-        stimuli : Stimulus object in the form of [{stim1},{stim2},...]
         """
         raise NotImplementedError
 
@@ -254,9 +243,6 @@ class BaseExperiment:
         # Current trial being rendered
         rendering_trial = -1
 
-        # Iterate through the events
-        iterate_events = self.trials.iterrows()
-
         # Clear/reset user input buffer
         self.__clear_user_input()
 
@@ -276,8 +262,7 @@ class BaseExperiment:
                 if rendering_trial < current_trial:
                     # Some form of presenting the stimulus - sometimes order changed in lower files like ssvep
                     # Stimulus presentation overwritten by specific experiment
-                    ii, trial = next(iterate_events)
-                    self.__draw(lambda: self.present_stimulus_callable(ii, trial, self.stim))
+                    self.__draw(lambda: self.present_stimulus(current_trial))
                     rendering_trial = current_trial
             else:
                 self.__draw(lambda: self.window.flip())

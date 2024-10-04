@@ -21,12 +21,12 @@ from typing import Optional
 class VisualN170(Experiment.BaseExperiment):
 
     def __init__(self, duration=120, eeg: Optional[EEG] = None, save_fn=None,
-                 n_trials=2010, iti=0.4, soa=0.3, jitter=0.2, use_vr=False):
+                 n_trials=2010, iti=0.4, soa=0.3, jitter=0.2, use_vr=False, window=None):
 
         # Set experiment name        
         exp_name = "Visual N170"
         # Calling the super class constructor to initialize the experiment variables
-        super(VisualN170, self).__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
+        super(VisualN170, self).__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr, window)
 
     def load_stimulus(self):
         
@@ -40,7 +40,7 @@ class VisualN170(Experiment.BaseExperiment):
         # Return the list of images as a stimulus object
         return [self.houses, self.faces]
         
-    def present_stimulus(self, idx : int, trial):
+    def present_stimulus(self, idx: int):
         
         # Get the label of the trial
         label = self.trials["parameter"].iloc[idx]
