@@ -10,40 +10,37 @@ from stimupy.stimuli.checkerboards import contrast_contrast
 class VisualPatternReversalVEP(Experiment.BaseExperiment):
 
     def __init__(self, duration=120, eeg: Optional[EEG] = None, save_fn=None,
-                 n_trials=2000, iti=0, soa=0.5, jitter=0, use_vr=False, size=None, window=None):
+                 n_trials=2000, iti=0, soa=0.5, jitter=0, use_vr=False, window=None):
 
         exp_name = "Visual Pattern Reversal VEP"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr, window)
 
         self.marker_names = [1, 2]
 
-        if size is None:
-            self.size = [1700, 1700] if use_vr else [1600, 900]
-        else:
-            self.size = size
-
     @staticmethod
     def create_monitor_checkerboard(intensity_checks):
         return contrast_contrast(
-            visual_size=(15, 15),  # size in degrees
+            visual_size=(9, 21),  # size in degrees
             ppd=30,  # pixels per degree
             frequency=(1, 1),  # spatial frequency of the checkerboard
             intensity_checks=intensity_checks,
             target_shape=(1, 1),
             alpha=0,
             tau=0,
+            check_visual_size=0.5
         )
 
     @staticmethod
     def create_vr_checkerboard(intensity_checks):
         return contrast_contrast(
-            visual_size=(20, 20),  # size in degrees
+            visual_size=(21, 21),  # size in degrees
             ppd=30,  # pixels per degree
             frequency=(1, 1),  # spatial frequency of the checkerboard
             intensity_checks=intensity_checks,
             target_shape=(1, 1),
             alpha=0,
             tau=0,
+            check_visual_size=0.5
         )
 
     def load_stimulus(self):
@@ -59,7 +56,7 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
         def create_checkerboard_stim(intensity_checks):
             return visual.ImageStim(self.window,
                                     image=create_checkerboard(intensity_checks)['img'],
-                                    units='pix', size=self.size, color='white')
+                                    units='pix', size=self.window.size, color='white')
 
         return [create_checkerboard_stim((1, -1)), create_checkerboard_stim((-1, 1))]
 
