@@ -26,8 +26,7 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
             intensity_checks=intensity_checks,
             target_shape=(1, 1),
             alpha=0,
-            tau=0,
-            check_visual_size=0.5
+            tau=0
         )
 
     @staticmethod
@@ -60,10 +59,10 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
 
         return [create_checkerboard_stim((1, -1)), create_checkerboard_stim((-1, 1))]
 
-    def present_stimulus(self, idx: int, trial: Any, stimuli: List[Any]):
+    def present_stimulus(self, idx: int):
         # onset
         checkerboard_frame = idx % 2
-        image = stimuli[checkerboard_frame]
+        image = self.stim[checkerboard_frame]
         image.draw()
         self.window.flip()
 
