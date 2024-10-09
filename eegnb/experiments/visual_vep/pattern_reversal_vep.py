@@ -32,14 +32,13 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
     @staticmethod
     def create_vr_checkerboard(intensity_checks):
         return contrast_contrast(
-            visual_size=(21, 21),  # size in degrees
+            visual_size=(15, 15),  # size in degrees
             ppd=30,  # pixels per degree
             frequency=(1, 1),  # spatial frequency of the checkerboard
             intensity_checks=intensity_checks,
             target_shape=(1, 1),
             alpha=0,
-            tau=0,
-            check_visual_size=0.5
+            tau=0
         )
 
     def load_stimulus(self):
@@ -52,10 +51,15 @@ class VisualPatternReversalVEP(Experiment.BaseExperiment):
             # Create Monitor checkerboard
             create_checkerboard = self.create_monitor_checkerboard
 
+        if self.use_vr:
+            size = self.window.size / 1.5
+        else:
+            size = self.window.size
+
         def create_checkerboard_stim(intensity_checks):
             return visual.ImageStim(self.window,
                                     image=create_checkerboard(intensity_checks)['img'],
-                                    units='pix', size=self.window.size, color='white')
+                                    units='pix', size=size, color='white')
 
         return [create_checkerboard_stim((1, -1)), create_checkerboard_stim((-1, 1))]
 
