@@ -76,11 +76,6 @@ class BaseExperiment:
 
         # Initializing the record duration and the marker names
         self.record_duration = np.float32(self.duration)
-        self.markernames = [1, 2]
-        
-        # Setting up the trial and parameter list
-        self.parameter = np.random.binomial(1, 0.5, self.n_trials)
-        self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
 
         # Setting up Graphics 
         self.window = (

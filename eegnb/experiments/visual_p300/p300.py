@@ -27,6 +27,10 @@ class VisualP300(Experiment.BaseExperiment):
         super().__init__(exp_name, duration, eeg, save_fn, n_trials, iti, soa, jitter, use_vr)
         
     def load_stimulus(self):
+
+        # Setting up the trial and parameter list
+        self.parameter = np.random.binomial(1, 0.5, self.n_trials)
+        self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
         
         load_image = lambda fn: visual.ImageStim(win=self.window, image=fn)
         
@@ -35,7 +39,7 @@ class VisualP300(Experiment.BaseExperiment):
         
         return [self.nontargets, self.targets]
 
-    def present_stimulus(self, idx:int, trial):
+    def present_stimulus(self, idx: int):
 
         label = self.trials["parameter"].iloc[idx]
         image = choice(self.targets if label == 1 else self.nontargets)
