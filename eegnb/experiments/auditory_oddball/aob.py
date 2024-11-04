@@ -73,11 +73,11 @@ class AuditoryOddball(Experiment.BaseExperiment):
 
         return 
     
-    def present_stimulus(self, idx : int, trial):
+    def present_stimulus(self, idx: int):
         """ Presents the Stimulus """
 
         # Select and play sound
-        ind = int(trial["sound_ind"])
+        ind = int(self.trials["sound_ind"].iloc[idx])
         self.auds[ind].stop()
         self.auds[ind].play()
 
