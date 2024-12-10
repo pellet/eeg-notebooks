@@ -11,7 +11,8 @@ obj.run()
 from abc import abstractmethod
 from typing import Callable, Union, List, Any
 from psychopy import prefs
-# change the pref libraty to PTB and set the latency mode to high precision
+from psychopy.visual.rift import Rift
+#change the pref libraty to PTB and set the latency mode to high precision
 prefs.hardware['audioLib'] = 'PTB'
 prefs.hardware['audioLatencyMode'] = 3
 
@@ -28,7 +29,8 @@ from eegnb import generate_save_fn
 
 class BaseExperiment:
 
-    def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float, use_vr=False, window: Union[visual.Window, rift.Rift] = None):
+    def __init__(self, exp_name, duration, eeg, save_fn, n_trials: int, iti: float, soa: float, jitter: float,
+                 use_vr=False, use_fullscr = True):
         """ Initializer for the Base Experiment Class
 
         Args:
@@ -51,7 +53,11 @@ class BaseExperiment:
         self.soa = soa
         self.jitter = jitter
         self.use_vr = use_vr
-        self.window = window
+        if use_vr:
+            # VR interface accessible by specific experiment classes for customizing and using controllers.
+            self.rift: Rift = visual.Rift(monoscopic=True, headLocked=True)
+        self.use_fullscr = use_fullscr
+        self.window_size = [1600,800]
 
     @abstractmethod
     def load_stimulus(self):
@@ -84,12 +90,11 @@ class BaseExperiment:
         self.parameter = np.random.binomial(1, 0.5, self.n_trials)
         self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
 
-        # Setting up Graphics
-        if self.window is None:
-            self.window = (
-                visual.Rift(monoscopic=True, headLocked=True) if self.use_vr
-                else visual.Window([1600, 900], monitor="testMonitor", units="deg", fullscr=True))
-
+        # Setting up Graphics 
+        self.window = (
+            self.rift if self.use_vr
+            else visual.Window(self.window_size, monitor="testMonitor", units="deg", fullscr=self.use_fullscr))
+        
         # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
         self.stim = self.load_stimulus()
 
@@ -172,20 +177,20 @@ class BaseExperiment:
         Args:
             vr_controller: 'Xbox', 'LeftTouch' or 'RightTouch'
             button: None, 'A', 'B', 'X' or 'Y'
-            trigger (bool): Set to True for trigger 
+            trigger (bool): Set to True for trigger
 
         Returns:
 
         """
         trigger_squeezed = False
         if trigger:
-            for x in self.window.getIndexTriggerValues(vr_controller):
+            for x in self.rift.getIndexTriggerValues(vr_controller):
                 if x > 0.0:
                     trigger_squeezed = True
 
         button_pressed = False
         if button is not None:
-            button_pressed, tsec = self.window.getButtons([button], vr_controller, 'released')
+            button_pressed, tsec = self.rift.getButtons([button], vr_controller, 'released')
 
         if trigger_squeezed or button_pressed:
             return True
@@ -216,7 +221,7 @@ class BaseExperiment:
         Clears/resets input events from vr controllers
         """
         if self.use_vr:
-            self.window.updateInputState()
+            self.rift.updateInputState()
 
     def run(self, instructions=True):
         """ Do the present operation for a bunch of experiments """
